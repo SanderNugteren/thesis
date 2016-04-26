@@ -1,0 +1,7 @@
+NLTK default tagger = 'taggers/maxent_treebank_pos_tagger/english.pickle'
+labels = ['PRP$', 'VBG', 'VBD', '``', 'VBN', 'POS', "''", 'VBP', 'WDT', 'JJ',
+	   'WP', 'VBZ', 'DT', '#', 'RP', '$', 'NN', 'FW', ',', '.', 'TO', 'PRP',
+	   'RB', '-LRB-', ':', 'NNS', 'NNP', 'VB', 'WRB', 'CC', 'LS', 'PDT', 'RBS',
+	   'RBR', 'CD', '-NONE-', 'EX', 'IN', 'WP$', 'MD', 'NNPS', '-RRB-', 'JJS',
+	   'JJR', 'SYM', 'UH']
+Lees de tag guide voor Penn treebank (Wallstreet Journal)

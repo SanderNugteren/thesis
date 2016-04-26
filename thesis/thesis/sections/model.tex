@@ -1,0 +1,51 @@
+\section{Model}
+
+A story is represented by a series of states $s_i$ and actions $a_j$.
+Each story starts in some initial state $s_0$, then one or more actions happen
+($a_0, ..., a_j$), which lead to $s_1$. This pattern continues until the final 
+state of the story, which is where the story ends.
+
+The story sequence is assumed to have some temporal relations too. To represent
+events happening in parallel, stories can contain stories themselves too.
+%TODO insert plaatje van story sequence
+
+\subsection{States}
+
+States are respresented as a graph of all currently active actors in the story
+and the relations between them.
+%TODO maak een plaatje van een state
+
+\subsection{Actions}
+
+Actions are represented as a short phrase (for example 
+\texttt{"frog promise ball."}
+or \texttt{"caliph transform into animal with magic\_powder"}).
+These sentences are parsed with WordNet %TODO cite wordnet
+to transform them into rule objects.
+
+\subsection{Rules}
+
+Rule objects are similar in form to action objects. These are extracted from 
+the stories by seeing how states are affected by a certain action.
+They can be represented as a tuple of $(a, \texttt{obj}, \texttt{subj}, \texttt{dat},
+\texttt{prec}, \texttt{eff})$.
+
+Here, the action is stored in a $a$ (for example "promise")
+
+The dataset consisted of fairy tales, which often contain certain stock 
+characters (the king, the princess, the witch, etc.)
+This property is exploited by keeping track of a count of which agents
+acted as objects, subjects, and (where applicable) datives in 
+$\texttt{obj}, \texttt{subj}, \texttt{dat}$, respectively.
+%In other genres this should probably replaced by certain properties the
+%actors have instead of the actors themselves
+
+$\texttt{prec}$ represents the preconditions of the action in terms of what 
+relations certain actors should have with each other.
+$\texttt{eff}$ represents the effects of the action in a similar fashion.
+For example, if $a = \texttt{"kill"}$, $\texttt{prec}$ might be 
+$ \{\texttt{hates}(\texttt{obj}, \texttt{subj})\} $ (you have to hate someone 
+before you kill them), and $\texttt{eff}$ would be ${\texttt{delete}(\texttt{obj})}$
+(if you are killed, you are removed from the next state).
+Note that both $\texttt{prec}$ and $\texttt{eff}$ are sets of conditions.
+An action can have multiple prerequisites and multiple effects on the story state.
