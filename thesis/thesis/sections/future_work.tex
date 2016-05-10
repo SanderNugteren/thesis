@@ -1,0 +1,35 @@
+\section{Conclusion and future work}
+
+In this paper it is shown that the model can capture the preconditions and
+implications of actions. Also, since the model keeps a list of probable actors
+around, it can capture how these characters would act in a story. Because of the
+way the model is queried however, these are not rules set in stone. A princess
+might not murder often, but there is a small chance that it does happen. In
+fact, a story where the princess would murder could be considered original.
+
+Creativity should be different enough from the historical data to be be novel,
+but not so different that the story makes no sense. Since the model can be
+easily queried for probabilities of certain story actions involving certain
+people, a planning algorithm could try to stay within these boundaries, by
+using an unconventional action when the story is becoming too predictable, or a
+conventional one when the story is becoming too bizarre.
+
+The current approach uses variables to keep track of how many times a certain
+character was involved with an action and in what way. In a fairy tale context
+this works, since characters are usually not named but just know by their
+archetype (the princess, the king, the witch, etc.). One could argue that this
+is just a peculiarity of fairy tales, but other genres have certain conventions
+too. For example, in film noir, there are also certain stock characters (the
+hard-boiled detective, the mysterious nightclub singer), but usually these are
+known by their names, not by their archetype. An extension of this algorithm
+could have characters with attributes, and let the probabilities be dependent on
+the character attributes instead of the characters themselves.
+
+Another way this approach could be extended is to get some more sophisticated
+natural language parsing being done. The stories the current model was trained
+on were manually annotated, but using only the information available from the
+story synopses available from Wikipedia or similar sources. The challenges here
+would be parsing the natural language, recognize the entities and how they
+interact. This would still be easier than feeding the algorithm the complete
+book, since then the algorithm would also have to filter out which parts are
+actually rellevant for the plot.
