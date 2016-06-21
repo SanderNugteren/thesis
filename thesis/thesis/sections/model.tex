@@ -1,12 +1,102 @@
 \section{Model}
 
-A story is represented by a series of states $s_i$ and actions $a_j$.
-Each story starts in some initial state $s_0$, then one or more actions happen
-($a_0, ..., a_j$), which lead to $s_1$. This pattern continues until the final 
-state of the story, which is where the story ends.
+\subsection{Overall architecture}
 
-The story sequence is assumed to have some temporal relations too. To represent
-events happening in parallel, stories can contain stories themselves too.
+Generating complete stories from a database of raw unannotated stories is a
+complicated process, which has to be partitioned into multiple components.
+The overall components of the architecture which is assumed for this work is as follows:
+\begin{itemize}
+\item \textbf{A story database:} This would be the set of as many stories
+as possible in a certain genre (for example, fairy tales), or possibly even
+multiple genres, if the objective is to generate stories that are a hybrid
+between genres.
+\item \textbf{A story synopsis database:} The stories in the story database have 
+to be summarized in some way (for example \cite{salton1997automatic}). Another
+option is to use human-made summaries, which exist for many stories already
+(from Wikipedia or other internet sources, for example). In this way the story
+is reduced to just the major plot elements, which should make rule extraction
+easier (there will be less "noise" and long-term dependencies of story events and
+actions).
+\item \textbf{A database of logically represented stories:} There has to be some
+way to transform the plot synopses into a logical representation (the rest of
+this section will outline what this representation looks like). When this
+structure is available, rules extracted from the stories can be made into a
+queryable database.
+\item \textbf{Generation of story synopses:} With the queryable database in place, a
+planning algorithm can generate new story synopses, in such a way that they are
+considered creative with respect to the existing database of synopses.
+\item \textbf{Generation of full stories:} To make the stories enjoyable, the
+plot synopses have to be transformed into full stories. This means expanding the
+synopsis into a story with enjoyable prose.
+\end{itemize}
+
+\newcommand\myspacing{3.5}
+\begin{figure}
+	\begin{tikzpicture}[remember picture,
+		outer/.style={draw=green,fill=green!20,thick,inner sep=10pt}
+	]
+		\node[outer,draw=green] (logic) at (0,0) {
+			\begin{tikzpicture}
+				\node[shape=rectangle,draw=black] (logicdb) at (2*\myspacing,0) {Database
+				of logically represented stories};
+			\end{tikzpicture}\\
+		};
+		\node[outer,draw=green] (synopsis) at (0,-3.5) {
+			\begin{tikzpicture}
+				\node[shape=rectangle,draw=black] (synopsisdb) at (\myspacing,0) {Story
+				synopsis database};
+				\node[shape=rectangle,draw=black] (synopsisgen) at (3*\myspacing,0)
+				{Generation of story synopses};
+			\end{tikzpicture}\\
+		};
+		\node[outer,draw=green] (story) at (0,-7) {
+			\begin{tikzpicture}
+				\node[shape=rectangle,draw=black] (storydb) at (0,0) {Story
+				database};
+				\node[shape=rectangle,draw=black] (storygen) at (4*\myspacing,0) {Story
+				generation};
+			\end{tikzpicture}\\
+		};
+		\draw[->] (storydb) -- (synopsisdb);
+		\draw[->] (synopsisdb) -- (logicdb);
+		\draw[->] (logicdb) -- (synopsisgen);
+		\draw[->] (synopsisgen) -- (storygen);
+	\end{tikzpicture}
+	\label{storypipeline}
+	\caption{The story generation pipeline}
+\end{figure}
+
+The focus of this thesis is twofold: the main contribution is a way to extract the rules found in a set of
+logically represented stories, and represent them in such a way that a program can reason about
+these rules in a creative way. To do this, the story synopses have been
+annotated manually to be able to focus on this part. However, the story
+representation has been chosen in such a way that it could plausibly be extracted
+in that form through natural language processing. 
+This story annotation scheme is another contribution of this thesis.
+
+\subsection{Rule Extraction}
+
+A basic story is represented by a series of states $s_i$ and actions $a_j$.
+Each story starts in some initial state $s_0$, then one or more actions happen
+($a_0, ..., a_j$), which lead to $s_1$. This is followed by one or more actions
+again, which leads to $s_2$, and so on. This pattern continues until the final 
+state of the story, which is where the story ends. This model is inspired by the
+MEXICA model, although it is less constrained, since a state can be followed by
+multiple actions instead of just one.
+
+The story sequence is assumed to be represented temporally ($s_{i+1}$ occurs
+after $s_i$). To represent events happening in parallel, stories can contain
+stories themselves too. For example, in some stories, character A meets
+character B at some place, and character B will tell character A about the
+events that led character B to be at this particular place. Such a flashback
+does not involve character A, and therefore can be considered a story within a
+story. Another set of examples of stories where this construction would be
+useful would be the stories of `One Thousand and One Nights' or `Canterbury Tales',
+which are framing stories containing stories themselves. For the current algorithm, this construction does not
+affect the rule extraction (the stories are read as separate stories), 
+but for future deeper analysis this could be useful.
+
+
 \begin{figure}
 	\begin{tikzpicture}[remember picture,
 		outer/.style={draw=green,fill=green!20,thick,inner sep=10pt}
@@ -56,35 +146,66 @@ events happening in parallel, stories can contain stories themselves too.
 	represents the part of "The Frog Prince" where the frog had promised to get
 	the princess's golden ball from the bottom of a pond, in return for spending
 	time with him (these promises are represented as relations between the
-	rellevant abilities and needs of the princess and the frog). There is one
+	relevant abilities and needs of the princess and the frog). There is one
 	action, where the frog gets the ball for the princess, which leads to the
 	altered state in \textit{State 2} (The princess does not need the ball
 	anymore, and the promise has been fulfilled, which is why both nodes have
 	been removed from the graph).}
 \end{figure}
 
-\subsection{States}
+\subsubsection{States}
 
-States are represented as a graph of all currently active actors, their
-abilities, and how these are connected with each other.
-%TODO maak een plaatje van een state
+States are represented as a graph of filled with nodes representing currently
+active characters, their abilities, and how these are connected with each other.
+An example of two states can be seen in figure \ref{storyrep}.
 
-\subsection{Actions}
+\subsubsection{Actions}
 
-Actions are represented as a short phrase (for example 
-\texttt{"frog promise ball."}
-or \texttt{"caliph transform into animal with magic\_powder"}).
-These sentences are parsed with WordNet %TODO cite wordnet
-to transform them into rule objects.
+Actions are represented as a short, natural language-like phrase (for example 
+\texttt{"the frog gets the ball"}
+or \texttt{"the frog promises the ball to the princess"}).
+These sentences are parsed with the Python Natural Language Toolkit (NLTK)
+%TODO cite NLTK
+to obtain the object, subject, verb and (optional) dative (which will be
+referred to as $\texttt{obj}, \texttt{subj}, \texttt{verb}$ and $\texttt{dat}$,
+respectively). For example "the frog gets the ball" would yield 
+$\texttt{obj}=\textrm{``ball"}, \texttt{subj}=\textrm{"frog"},
+\texttt{verb}=\textrm{``gets"}, \texttt{dat}=\textrm{``"} $. First the
+sentences are tokenized (individual words are separated). Then NLTK assigns a
+Part of Speech (P.O.S.) tag, denoting the lexical category that the word belongs
+to. This takes care of the ambiguity found on the lexical level by looking at
+the context in which the word appears (in the seconds example, ``promises" could
+be a noun or a verb, but due to the context it is tagged as a verb). For the
+experiments the recommended P.O.S.-tagger was used, which is a perceptron tagger
+trained on the Penn Treebank dataset.
 
-\subsection{Rules}
+Then, the sentence is parsed using a simple tree-parser using a feature-based
+grammar. This grammar contains rules to infer which word is the subject, which
+is the object, and so on. The rules in the grammar have the following form:
+$$
+\texttt{S}{[}\texttt{subj}=s, \texttt{verb}=v, \texttt{obj}=o, \texttt{dat}=d{]}
+\Rightarrow
+\texttt{NP}{[}\texttt{N}=s{]} \texttt{VP}{[}\texttt{V}=v, \texttt{N}=o,
+\texttt{dat}=d{]}
+$$
+On the left hand side there is one non-terminal (in this case $\texttt{S}$), and
+on the right hand side there is at least one terminal or non-terminal symbol
+($\texttt{NP}$ and $\texttt{VP}$). The values for the variables are obtained in
+a recursive fashion. This means that $s$, $v$ and $o$'s instantiation are dependent on the rules
+chosen to expand the $\texttt{NP}$ and $\texttt{VP}$ nodes of the tree. After
+enough node expansions a non-terminal will be expanded to a terminal, which will
+instantiate the variables.
+%TODO clear up this gibberish
+
+\subsubsection{Rules}
 
 Rule objects are similar in form to action objects. These are extracted from 
 the stories by seeing how states are affected by a certain action.
-They can be represented as a tuple of $(a, \texttt{obj}, \texttt{subj}, \texttt{dat},
+They can be represented as a tuple of $(\texttt{action}, \texttt{obj}, \texttt{subj}, \texttt{dat},
 \texttt{prec}, \texttt{eff})$.
 
-Here, the action is stored in a $a$ (for example "promise")
+Here, the verb denoting which action is taking place is stored in 
+$\texttt{action}$ (for example "promise").
 
 The dataset consisted of fairy tales, which often contain certain stock 
 characters (the king, the princess, the witch, etc.)
@@ -103,3 +224,64 @@ before you kill them), and $\texttt{eff}$ would be ${\texttt{delete}(\texttt{obj
 (if you are killed, you are removed from the next state).
 Note that both $\texttt{prec}$ and $\texttt{eff}$ are sets of conditions.
 An action can have multiple prerequisites and multiple effects on the story state.
+
+\subsubsection{Extracting rules}
+
+Extracting the effect $\texttt{eff}$ of an action is the easiest. For now
+actions are not assumed to have effects that do not become apparent immediately
+(in other words, the action has an immediate effect on the next state, but no
+lingering effects on the states after that).
+Therefore it is enough to see what the difference is between the state before
+and the state after the action. The different things that are tracked are the
+nodes in the graph that appear and disappear in the new state, and the
+connections that appear and dissappear in the new state.
+
+However, because multiple actions can appear between states it is difficult to
+discern which actions affects what parts of the network. 
+Therefore, for each action, the algorithm only looks at the actors involved in 
+the action ($\texttt{obj}, \texttt{subj}, \texttt{dat}$), and the nodes
+connected to them directly (these nodes are assumed to be either desires or
+abilities of the characters). This keeps the preconditions managable too, since
+they don't just include the whole previous state, but only the relevant parts
+for the action. Of course this assumption breaks down if a lot of actions
+between two states
+involve the same actor, but this pruning of possible actorsdoes already reduce
+the ambiguity in a meaningful way.
+
+So, in figure \ref{storyrep} the frog node and the nodes containing the word
+"ball" ("frog\_abilities:ball" and "princess\_needs:ball") are considered, as
+well as their immediate neighbor nodes and the connections to them (in effect,
+the whole first state without the princess node).
+
+Similar to effects, for preconditions the first state is assumed to have all the
+relevant information for the action in it (it is not necessary to look at the 
+preceding states, since they offer no additional information). Therefore all
+information in the first state is assumed to be a part of the precondition.
+
+\subsubsection{Querying the rules}
+
+%Insert some stuff about conditional probs and stuff
+All extracted actions are stored together in a database. This database can be
+queried for the probabilities of certain actions: $$p(a) =
+\frac{\it{Count}(a)}{\sum_{x \in A}\it{Count}(x)}$$
+Here $a$ is the action and $A$ is the set of all seen actions.
+We can also query the database in a conditional manner (for
+example, if we want to find some action for the princess to do in the story, we
+can simply query the probability of different actions, given that the princess
+is the subject of the action:
+$$p(a \mid a_{\texttt{subj}}=\texttt{"princess"}) = 
+\frac{\it{Count}(a \land a_{\texttt{subj}}=\texttt{"princess"})}{\it{Count}(a)}$$)
+These probabilities can be used by a planning algorithm to generate stories in a
+creative manner. In the introduction of this paper, we noted that for artistic
+creativity, in this case story generation, we have to generate novel stories
+that are both novel and also are comprehensible. With the action probabilities,
+we have a metric of how plausible certain actions are, so a planning algorithm
+could choose the next action based on how plausible the story is. If the story
+is approaching the existing stories too much (the probability of the
+generated story becomes too high), it can choose an action with a
+low probability to make it more creative. But if the story becomes too
+unpredictable (the probability of the story becomes too low), the program might
+choose an action with a high probability to balance things out. However, finding
+which exact values to use for the upper and lower boundaries for this algorithm
+would require more annotated stories to do a proper analysis, and is therefore
+outside the scope of this thesis.

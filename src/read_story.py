@@ -38,7 +38,6 @@ def learn_actions(state1, state2, actions):
         print "action: " + str(action)
         print "nodes_and_neighbors: " + str(nodes_and_neighbors)
         rule.actors = a
-        #TODO add preconditions to the rule
         #find the relevant nodes (the ones contained in the "a" object) 
         #and the nodes they connect to
         relevant_edges = set()

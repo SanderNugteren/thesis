@@ -1,14 +1,55 @@
 \section{Related Work}
 
-There have been many approaches to computational creativity. For example, there
+Much research has been done on computational creativity, for example in
+videogames (\cite{liapis2014computational} \cite{crawford1998computer}), painting
+(\cite{colton2015painting}), dance choreography (\cite{carlson2011scuddle}) and
+music (\cite{johnson2014musical}).
+
+Most early work in storytelling has been inspired by the work of Propp
+(\cite{propp1968morphology}). Propp identified many recurring plot elements in
+Russian folk tales (for example `pursuit', where the hero pursues the villain, or
+`wedding', where the hero marries and gets rewarded by the community (for example
+by ascension to the throne)), as well as recurring characters (hero, villain,
+the helper and the princess). This served to create an ontology for folk tales,
+so that they could be more easily analyzed and compared, but was later used as a
+framework by approaches using a story grammar.
+
+More recently, there
 is the work by Gerv\'as et al. (\cite{Gervas2005235}) that uses case-based
-reasoning with a representation based on the work of Propp (\cite{propp1968morphology}).
-The model proposed in this paper is more general, however, since there is very
-little domain knowledge involved (just the content of the stories themselves).
-This makes this model more generally applicable outside of the folk tale domain.
+reasoning with a representation based on the plot elements and character
+archetypes of Propp. The way this works is that a sequence of events is generated using the
+building blocks provided by Propp, and then templates are used to generate a
+story in natural language.
+The model proposed in this thesis is more general, however, since there is very
+little domain knowledge involved (just the content of the stories themselves, as
+opposed to all the knowledge from Propp).
+This makes this model more generally applicable outside of the folk tale domain,
+not just for generating new stories within one domain, but possibly also to
+build a story model using multiple genres at the same time.
+
+Ther is also the work of McIntyre and Lapata (\cite{McIntyre2010}), which
+generates stories using evolutionary algorithms. This work is inspired by the
+work of Chambers and Jurafsky (\cite{chambers2009unsupervised}). Both works are
+also datadriven, but they try to learn certain predicate co-occurences (when someone
+gets arrested, he is usually interrogated next) and entity-predicate
+co-occurences (the person doing the arresting is a \texttt{\{detective, police
+officer\}}). The schemata learned in this way are learned for events involving a
+certain participant (called the \emph{protagonist}). This leads to schemata that
+can contain a great deal of events. This schemata can be branching (somebody on trial
+might be convicted or go free), further increasing the complexity of the
+structures learned.
+Though generating these long event chains would improve the coherence of a story, 
+it might impede the creativity of the story generator, since trying something novel is
+difficult to do with these rigid structures, while the structures presented in
+this work are much simpler and therefore more easily recombined in novel ways.
+%I dunno, maybe this is true
+
+%TODO add something about agent-based storytelling?
 
 The work in this paper is mainly inspired by the MEXICA story generator. %TODO cite
 However, in MEXICA the relations between characters were much simpler, and 
 all possible actions had to be pre-defined. In this work, the focus is more on
 the rule-extraction side, whereas MEXICA was more focused on the generation of
-the stories.
+the stories. The method described in this paper could be used to suplement
+MEXICA with a way to learn actions from stories themselves, while leaving the
+actual generation to MEXICA itself, though.
