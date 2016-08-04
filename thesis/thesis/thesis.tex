@@ -2,9 +2,11 @@
 \usepackage{graphicx, color}
 \usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{tikz}
-\usetikzlibrary{positioning,calc}
+\usetikzlibrary{arrows.meta,positioning,calc}
 
 \newcommand{\red}[1]{{\color{red}{#1}}}
+\let\oldsection\section
+\renewcommand\section{\clearpage\oldsection}
 
 \begin{document}
 
@@ -28,7 +30,7 @@
 %----------------------------------------------------------------------------------------
 
 \HRule \\[0.4cm]
-{ \huge \bfseries \red{PrInCESS: extracting rules from story synopses}}\\[0.4cm] % Title of your document
+{ \huge \bfseries Extracting rules from story synopses}\\[0.4cm] % Title of your document
 \HRule \\[0.5cm]
  
 %----------------------------------------------------------------------------------------
@@ -37,7 +39,7 @@
 
 by\\[0.2cm]
 \textsc{\Large Sander Nugteren}\\[0.2cm] %you name
-\red{6042023}\\[1cm]
+6042023\\[1cm]
 
 
 %----------------------------------------------------------------------------------------
@@ -46,8 +48,8 @@ by\\[0.2cm]
 
 {\Large \today}\\[1cm] % Date, change the \today to a set date if you want to be precise
 
-\red{42 EC}\\ %
-\red{April 2015-June 2016}\\[1cm]%
+42 EC\\ %
+June 2016\\[1cm]%
 
 %----------------------------------------------------------------------------------------
 %	COMMITTEE SECTION
@@ -55,14 +57,14 @@ by\\[0.2cm]
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushleft} \large
 \emph{Supervisor:} \\
-\red{Dr. F.M. (Frank) \textsc{Nack} }% Supervisor's Name
+Dr. F.M. \textsc{Nack}% Supervisor's Name
 \end{flushleft}
 \end{minipage}
 ~
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright} \large
 \emph{Assessor:} \\
-\red{Dr A  \textsc{Person}}\\
+Dr. R.G.F. \textsc{Winkels}\\
 \end{flushright}
 \end{minipage}\\[2cm]
 
@@ -70,18 +72,33 @@ by\\[0.2cm]
 %	LOGO SECTION
 %----------------------------------------------------------------------------------------
 
-\framebox{\rule{0pt}{2.5cm}\rule{2.5cm}{0pt}}\\[0.5cm]
+%\framebox{\rule{0pt}{2.5cm}\rule{2.5cm}{0pt}}\\[0.5cm]
 %\includegraphics[width=2.5cm]{figure}\\ % Include a department/university logo - this will require the graphicx package
-\textsc{\large \red{institute name}}\\[1.0cm] % 
+%\textsc{\large \red{institute name}}\\[1.0cm] % 
  
 %----------------------------------------------------------------------------------------
 
 \vfill % Fill the rest of the page with whitespace
 
 \end{titlepage}
+
+\tableofcontents
+
+\clearpage
+
+\begin{abstract}
+This work aims to store stories in a database, learn the properties of story
+actions, in such a way that they can be used to generate new stories. When
+trained on two fairy tales (``The Frog Prince'' and ``Caliph Stork'') it was able to capture the rules of the stories and was
+able to generalize over multiple occurences of the same event type in different
+stories (in this case, magical transformation from animal to human and vice
+versa).
+\end{abstract}
+
 \input{sections/intro.tex}
 \input{sections/related_work.tex}
 \input{sections/model.tex}
+\input{sections/eval.tex}
 \input{sections/future_work.tex}
 
 \bibliographystyle{plain}

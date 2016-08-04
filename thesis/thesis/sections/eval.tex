@@ -1,0 +1,33 @@
+\section{Evaluation}
+
+The system has been tested on two stories: `The Frog Prince' and
+`Caliph Stork'. The story synopses of these stories were taken from Wikipedia
+and annotated so they conformed to the model used in this thesis (using states
+and actions).
+These stories were chosen since they both contain animal transformations. In `The
+Frog Prince' the titular prince starts as a frog and eventually becomes a human
+prince, in `Caliph Stork' the caliph and his vizier start as humans, are changed
+into storks with a magic powder and both have to find a way to get back to human
+form. Since the stories have these common elements, the program has to be able to
+handle these appropriately (see them as being two instances of the same type of
+event).
+
+One of the problems was that the transformations were slightly different. In
+Caliph Stork, the transformation was done with a magic powder, and if the user
+laughed while in animal form, they could not change back. This is explicitly
+told to the caliph, and by extension, to the reader. However, in the frog prince
+there are also certain prerequisites for the frog to become a prince again, but
+these are never explicitly stated (did the frog have to be kissed by a princess,
+or would any person, male or female, do?).
+
+Since the magical transformation component in `The Frog Prince' was not explicitly
+mentioned in-story, there was also no explicit annotation. However, in `Caliph
+Stork', the rules of the magic powder were nodes themselves, all connected to
+the magic powder. Because of this, the program learned that both explicitly
+mentioning the rules was an option (and since only `Caliph Stork' had such
+rules, the magic powder and its specific rules were the only type it learned), as well as not mentioning the rules
+at all (as in `The Frog Prince'). However, the act of transformation was the
+same, so the two instances were extracted as two parts of the same rule. This proves that the
+program can learn similarities between stories like this one, and, given more
+stories, it could obtain more and more accurate information.
+

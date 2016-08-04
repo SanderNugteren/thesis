@@ -5,7 +5,7 @@ Creativity is seen as being closely correlated with intelligence (either
 creativity being a component of intelligence, or the other way around).
 However, many feel that computer programs cannot be creative. Because of the
 previously outlined correlation, this also discounts the field of artificial
-intelligence by stating it can never be "true" intelligence.
+intelligence by stating it can never be ``true'' intelligence.
 
 According to Boden (\cite{Boden1998347})
 there are two types of creativity. There is psychological creativity (or
@@ -19,15 +19,20 @@ subject. However, this does not mean that algorithms can not produce h-creative
 work.
 
 There are many ways in which creativity can be expressed. In fact, any idea that
-is considered to be novel and to have some kind of value (monetary, aesthetic) is
-considered an expression of creativity. However, creativity is mostly used with regards to
+is considered to be novel and to have some kind of value (e.g., monetary, aesthetic) is
+considered an expression of creativity. However, the term creativity is mostly used with regards to
 the arts, such as painting, sculpting, poetry and storytelling. In these
 artistic fields, creativity can be seen as a problem with two opposing
-objectives. One the one hand, the idea has to be novel, which means that it must be different from
+objectives. On the one hand, the idea has to be novel, which means that it must be different from
 the existing works. On the other hand, it should still be comprehensible with
-respect to the rules and conventions of the art (generating a story filled with
+respect to the rules and conventions of the art. Generating a story filled with
 gibberish or a painting with random pixels is not a valuable contribution to the
-art, since it has no meaning).
+art, since it is hard to interpret a meaning. Of course, this is an extreme
+case, but one could also say that if a writer set out to create a new work in a
+particular genre (for example, a fairy tale), but ended up with something that
+is not recognized as a work belonging to that genre, he failed at his task to
+create a work in that genre (even though the work might have some unintentional
+value in some other way).
 
 %Storytelling is important
 Storytelling is an important part of human cultures around the world.
@@ -36,20 +41,20 @@ and experiences across generations, encouraging a broadening of horizons through
 identifying with the characters in the story, and relating these experiences to
 the real world around them. The universalness of storytelling seems to imply
 that it is something fundamentally human to do, which might tie it (like
-creativity) intothe way the human thought process.
+creativity) into the human thought process.
 %TODO cut down on/rewrite bullshit
 
 The approach used in this thesis is a form of instance-based learning, where the
-rules are learned from the story database itself. This has the advantage that
-the creativity of a rule is dependent on which stories have already been seen,
+rules are learned from the stories in the story database themselves. This has the advantage that
+the measure of creativity of a rule is dependent on which stories have already been seen,
 which is a good metric if one considers p-creativity. Furthermore, the more data
 will be added, the more the rule distribution of the model will start to match 
 the actual historical use of rules and tropes, which would bring the system closer to
 h-creativity.
 
 From another perspective, one could say that this is analogous to how human
-creative writing process works (authors read a lot of stories or have real-life
-experiences and recombine elements in their own stories in novel and exciting ways).
+creative writing process works. Authors read a lot of stories or have real-life
+experiences and recombine elements in their own stories in novel and exciting ways.
 
 The ruleset extracted in this way can be used both in a fully automated story
 generator, where an algorithm uses the rules and their associated probabilities
@@ -57,4 +62,8 @@ to generate a story with minimal human input or even none at all, or it could be
 of a recommender system for writers (like the co-creative approaches detailed in
 \cite{kantosalo2014isolation}), where it recieves the story the author
 wrote and makes suggestions to help further plot development, or augment the
-story to make it more interesting.
+story to make it more interesting. It could also be used to compare different
+stories and analyze where similarities can be found. This would lead to
+automated story analysis, which could help writers in a more indirect way (by
+learning more about the structure of other stories, a writer can improve their
+understanding of a particular genre or storytelling in general).

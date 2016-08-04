@@ -9,10 +9,21 @@ Most early work in storytelling has been inspired by the work of Propp
 (\cite{propp1968morphology}). Propp identified many recurring plot elements in
 Russian folk tales (for example `pursuit', where the hero pursues the villain, or
 `wedding', where the hero marries and gets rewarded by the community (for example
-by ascension to the throne)), as well as recurring characters (hero, villain,
+by ascension to the throne)), as well as recurring character archetypes (hero, villain,
 the helper and the princess). This served to create an ontology for folk tales,
-so that they could be more easily analyzed and compared, but was later used as a
-framework by approaches using a story grammar.
+so that they could be more easily analyzed and compared, but later inspired
+approaches using a story grammar, the intuition being that there exists a distinct
+ordering of story elements for all stories (with some story elements being optional). A
+notable example of this story grammar philosophy is TALE-SPIN
+(\cite{meehan1977tale}), which tries to model the author process as generating
+a problem for the story by selecting certain attributes for characters (for example, one of the characters is hungry), and then
+applies certain grammar rules to solve the problem of the story (the character
+tries to obtain food).
+Of course, all story rules and all possible character attributes for the grammar were put in
+a priori, and therefore the stories that were generated were very basic. Also,
+story generation is seen as purely logic problem solving, and therefore there
+is no way to distinguish between all possible problem solutions in such a way that the
+most enjoyable solution (for the reader) is chosen.
 
 More recently, there
 is the work by Gerv\'as et al. (\cite{Gervas2005235}) that uses case-based
@@ -22,12 +33,13 @@ building blocks provided by Propp, and then templates are used to generate a
 story in natural language.
 The model proposed in this thesis is more general, however, since there is very
 little domain knowledge involved (just the content of the stories themselves, as
-opposed to all the knowledge from Propp).
+opposed to the manually obtained knowledge from Propp).
 This makes this model more generally applicable outside of the folk tale domain,
-not just for generating new stories within one domain, but possibly also to
+not just for generating new stories within other genres by simply training on a
+different set of stories, but possibly also to
 build a story model using multiple genres at the same time.
 
-Ther is also the work of McIntyre and Lapata (\cite{McIntyre2010}), which
+There is also the work of McIntyre and Lapata (\cite{McIntyre2010}), which
 generates stories using evolutionary algorithms. This work is inspired by the
 work of Chambers and Jurafsky (\cite{chambers2009unsupervised}). Both works are
 also datadriven, but they try to learn certain predicate co-occurences (when someone
@@ -40,15 +52,64 @@ might be convicted or go free), further increasing the complexity of the
 structures learned.
 Though generating these long event chains would improve the coherence of a story, 
 it might impede the creativity of the story generator, since trying something novel is
-difficult to do with these rigid structures, while the structures presented in
+difficult to do with these rigid structures (not only are the structures very
+large, making them difficult to recombine, but they are also centered on the
+protagonist, so substituting the protagonist becomes difficult to do right), while the structures presented in
 this work are much simpler and therefore more easily recombined in novel ways.
-%I dunno, maybe this is true
+
+The storygenerator MAKEBELIEVE by Liu and Singh (\cite{liu2002makebelieve}) uses
+a database of common sense reasoning to generate its stories. However, this
+database was not specifically constructed to generate stories, so the stories
+that were generated tended to be very logical, but therefore also very
+predictable. By
+learning from the stories directly, we know that the events have appeared at
+least once in a story, and therefore can be used to make a compelling story.
+In addition to this, these common sense databases were generally created to
+solve real-world problems. However, in many story genres
+the rules of what is possible in the world are very different. In fairy tales,
+there is magic which can do things that are not normally possible, while in science fiction
+advanced technology fulfills a similar function. Because of this, these common sense
+databases are ill-suited to generate these kinds of stories, which brings back
+the problem that somehow knowledge has to be obtained about the fantasy
+world again (and if the representation of that knowledge is still in ontologies,
+these ontologies would have to be created for each genre or even each individual
+story (the rules from a science fiction can be different from fairy tales, and
+even between two separate science fiction universes there might be a difference
+in what is and what is not possible)).
 
 %TODO add something about agent-based storytelling?
+Another paradigm that has gained popularity in the field of automated story
+generation is an agent-based approach. In this approach, all characters are
+logical agents interacting with eachother. In some cases there is also a
+director-like agent, that ensures that the story that is being generated adheres
+to certain constraints to make the story enjoyable, instead of just a long
+series of interactions between agents.
 
-The work in this paper is mainly inspired by the MEXICA story generator. %TODO cite
-However, in MEXICA the relations between characters were much simpler, and 
-all possible actions had to be pre-defined. In this work, the focus is more on
+In a videogame or a training simulation, where the user interacts with different
+entities all the time, this is a very natural way of thinking about story
+generation. For example, IN-TALE by Riedl and Stern (\cite{riedl2006believable})
+was used to simulate the experience of being an army officer of a peacekeeping force
+on a busy marketplace in a 3D computer game engine. In this simulation, each
+character is an agent with its own goals, trying to achieve them within the
+simulation while interacting with the human character. Another example is the
+work of Cavazza, Charles and Mead (\cite{cavazza2002interacting}), where the
+user is similarly able to influence the narrative by her own actions. However,
+both these systems have in common that they work off a certain scenario,
+constricting the possible actions of both the user and the actors. Because of
+this, these systems are not able to generate a large variety of different
+stories, but just variations within the same scenario.
+%It would be a stretch to call these systems creative.
+
+The work in this paper is mainly inspired by the MEXICA story generator
+(\cite{perez2001mexica}). %TODO cite
+The architecture used in this thesis is similar, in that it also represents the
+story as a sequence of states and actions, and that each state consists of a
+graph of all actors in the story.
+However, in MEXICA the relations between characters were much simpler (the only
+type of relation between characters is a 5 point scale ranging from hatred to
+love), and 
+all possible actions had to be pre-defined (they were not learned from other
+stories, like in this thesis). In this work, the focus is more on
 the rule-extraction side, whereas MEXICA was more focused on the generation of
 the stories. The method described in this paper could be used to suplement
 MEXICA with a way to learn actions from stories themselves, while leaving the

@@ -1,14 +1,56 @@
-\section{Conclusion and future work}
+\section{Conclusion}
+%something about deep learning?
+
+Previously this work was more geared towards story analysis rather than story
+generation. Therefore the focus was more towards recognizing larger sequences of
+states and actions instead of the current approach, which tries to learn the
+action by merely looking at the preceding and the next state. That way, the program could make statements
+such as: `I saw sequence XYZ both in story A and in story B, but in story B action X
+was started with other types of characters.'
+
+Again, as outlined in the related work
+section, this has its advantages and disadvantages. On the one hand, larger story
+chunks might lead to more coherent and informed story progression. On the other
+hand, this rigidity might impede creativity, since these large story fragments
+will be similar to the stories the program has seen already. Therefore this
+approach was abandoned in favor of a model based on learning individual story
+actions rather than story sequences. This does not mean that this approach has
+no merit, though. Perhaps a hybrid approach which uses
+sequences of differing sizes could be used to generate stories with the
+advantages of both methods, being both coherent and creative.
 
 In this paper it is shown that the model can capture the preconditions and
 implications of actions. Also, since the model keeps a list of probable actors
 around for \texttt{obj}, \texttt{subj} and \texttt{dat},
 it can capture how these character archetypes would act in a story. Because of the
 way the model is queried however, these are not rules set in stone. A princess
-might not murder often, but there is a small chance that it does happen. In
-fact, a story where the princess would murder could be considered original, if
+might not commit murder often, but there is a small chance that it does happen. In
+fact, a story where the princess would commit murder could be considered original, if
 handled well (with a logical justifaction arising from a set of more probable
 events).
+
+Of course, the evaluation has been done on just two stories, since the
+annotation for now is a time-intensive process. Because of this no actual story
+generation has been done, but this thesis should be seen as more of a proof of
+concept: yes, patterns can be recognized, and if more annotated stories were
+available, the program could learn more interesting patterns. When it is
+possible to automatically annotate the stories, it should be more feasible to
+generate actually interesting stories.
+
+\section{Future work}
+
+%Something about abstraction of story makes it possible to generalize over media
+%(text, movie, holodeck)
+Another contribution of this thesis is the hierarchy presented in the Model
+section. Though the current system was designed to generate fairy tale texts
+from existing fairy tale texts, other types of media (e.g. movies, video
+games) could be used to extract story rules from them.
+These other media types could also be generated using our model, once a method
+to generate them from the logical representation has been devised. Both of
+these things are possible since the model uses an abstract representation of the
+rules that is general enough that it could be used across different media.
+This could be done by reducing the plot of these new media types to text plot
+synopses.
 
 As briefly alluded to in the Model section, the next step is to let a planning
 algorithm generate stories based on the obtained rule probabilities. A possible
@@ -20,12 +62,32 @@ The current approach uses variables to keep track of how many times a certain
 character was involved with an action and in what way. In a fairy tale context
 this works, since characters are usually not named but are just known by their
 archetype (the princess, the king, the witch, etc.). One could argue that this
-is just a unique feature of fairy tales, but other genres have certain conventions
+is just a unique property of fairy tales, but other genres have certain conventions
 too. For example, in film noir, there are also certain stock characters (the
-hard-boiled detective, the mysterious nightclub singer), but usually these are
-known by their names, not by their archetype. An extension of this algorithm
-could have characters with attributes, and let the probabilities be dependent on
-the character attributes instead of the characters themselves.
+hard-boiled detective, the femme fatale), but usually these are
+known by their names, not by their archetype, which is, either consciously or
+subconsciously, inferred by the reader. This is possible because these
+archetypes share certain attributes, such as the type of job they do, their
+skills and their desires. An extension of this algorithm
+could keep track of characters by their attributes instead, and let the action
+probabilities be dependent on the character attributes instead of the characters
+themselves. So instead of asking how probable it is that somebody is going to be
+murdered by Jane (who could fill many different roles in other stories or not
+appear in other stories at all), one could ask what the probability is that somebody gets
+killed by a person who has a gun (which gives a much more informed guess).
+
+Another thing that would be helpful to the program would be to incorporate
+ontologies to help it make generalizations over rules.
+For example, in `Caliph Stork' the animal the characters were transformed into
+was a stork, while in `The Frog Prince' the animal was a frog, but in essence,
+they used the same type of character (an animal). If the program can generalize
+in this way and has additional information available through these ontologies,
+it could in this case generalize over the type of transformation (human to
+animal transformations are often done as a curse, while animal to human
+transformations are often the result of a kiss or a promise of marriage), but it
+could also more easily substitute new characters in old story rules (for
+example, generate a story where characters are changed into wolves or ducks,
+since these are also animals).
 
 Another way this approach could be extended is to get some more sophisticated
 natural language parsing being done. The stories the current model was trained
@@ -35,8 +97,13 @@ would be parsing the natural language found in the synopses, recognize the
 entities, their properties and how they interact.
 This would still be easier to accomplish than feeding the algorithm the complete
 story as it might be found in a book, since then the algorithm would also have
-to filter out which parts are actually rellevant for the plot.
+to filter out which parts are actually relevant for the plot, and have to
+interpret the meaning of complex sequences of actions.
 Of course, the representation obtained automatically would not be as rich as a
-humanly annotated one, but with sufficient stories it should be possible to fill
-in the gaps, even without modifying the current way of probability computation
-for rules.
+humanly annotated one, but with sufficient stories it should be possible to
+generate interesting stories even with a sparse database, without modifying the
+current way of probability computation for rules. This would be especially
+powerful if actions that are synonymous or otherwise linguistically related
+(comparable to WordNet's synsets) can be combined together. That way, the amount
+of data needed to be able to generate an interesting story would be even
+smaller.

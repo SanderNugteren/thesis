@@ -50,8 +50,8 @@ def add_to_grammar(rules):
 
 def parse_sentence(sentence):
     '''
-    This function will parse an action desribed in a plain sentence
-    For example, the sentence "frog kill princess" should yield
+    This function will parse an action described in a plain sentence
+    For example, the sentence "the frog kill the princess" should yield
     S[OBJ='frog', SUB='princess', VERB='kill']
     '''
     #tokens = nltk.word_tokenize(sentence)
