@@ -10,7 +10,7 @@ of the following problems:
 	example, in IN-TALE, there are very few possibilities for the story outcome,
 	because the characters are the same for each story, and the ending is only
 	dependent on the person playing the simulation).
-	\item The story rules are made by hand (Gervás uses the story elements annotated
+	\item The story rules are made by hand (Gerv\'as uses the story elements annotated
 	by Propp, while in MEXICA the rules have been made by the creator of the
 	program) or are lifted from knowledge bases not specifically designed for
 	story generation (MAKEBELIEVE by Liu and Singh).
@@ -45,8 +45,15 @@ long-term dependencies of story events).
 \item \textbf{A database of logically represented stories:} There has to be some
 way to transform the plot synopses into a logical representation (the rest of
 this section will outline what this representation looks like). When this
-structure is available, rules extracted from the stories can be made into a
-queryable database.
+structure is available, stories can be more easily compared, and rules can be
+extracted from them.
+\item \textbf{A database of story rules:} This database contains the rules of
+how story events should unfold (the effect on the story), and when these events
+are possible (the event prerequisites).
+\item \textbf{Generation of logically represented stories:} Using the rules, a
+new story can be generated, either from a random premise (a random initial state
+is chosen), or by adapting an existing story (taking parts of one of the
+observed stories and substituting them for others).
 \item \textbf{Generation of story synopses:} With the queryable database in place, a
 planning algorithm can generate new story synopses, in such a way that they are
 considered creative with respect to the existing database of synopses.
@@ -56,55 +63,69 @@ synopsis into a story with enjoyable prose. For other media, such as film or
 videogames, creating images might be required too.
 \end{itemize}
 These components are visualized in a hierarchy in figure \ref{storypipeline}. In
-this figure, there are three levels:
+this figure, there are four levels:
 \begin{itemize}
-\item The story level at the bottom, where the stories are in their full prose form.
-\item The synopsis level in the middle, where the stories are in the form of a
-human-readable synopsis.
-\item The logic level at the top, where the stories are represented as a
+\item The story level at the base, where the stories are in their full prose form.
+\item The synopsis level, where the stories are in the form of a human-readable
+synopsis.
+\item The logic level, where the stories are represented as a
 sequence of states and actions, and where the rules are extracted from them.
+\item The rules level, where the complete rule set is stored that has been
+extracted from the stories the program has seen.
 \end{itemize}
 
-\newcommand\myspacing{3.5}
+%\newcommand\myspacing{2.5}
+\newcommand\myspacing{2.4cm}
 \begin{figure}
 	\begin{tikzpicture}[remember picture,
 		outer/.style={draw=green,fill=green!20,thick,inner sep=10pt}
 	]
-		\node[outer,draw=green] (logic) at (0,0) {
+		\node[outer,draw=green] (rules) at (0,0) {
 			\begin{tikzpicture}
-				\node[shape=rectangle,draw=black] (logicdb) at (2*\myspacing,0) {Database
-				of logically represented stories};
+				\node[shape=rectangle,draw=black] (ruledb) at (3*\myspacing,0) {Database
+				of story rules};
 			\end{tikzpicture}\\
 		};
-		\node[outer,draw=green] (synopsis) at (0,-3.5) {
+		\node[outer,draw=green] (logic) at (0,-3.5) {
+			\begin{tikzpicture}
+				\node[shape=rectangle,draw=black,text width=2.5cm] (logicdb) at (2*\myspacing,0) {Database
+				of logically represented stories};
+				\node[shape=rectangle,draw=black,text width=2.5cm] (logicgen) at (4*\myspacing,0) {
+				Generation of logically represented stories};
+			\end{tikzpicture}\\
+		};
+		\node[outer,draw=green] (synopsis) at (0,-7) {
 			\begin{tikzpicture}
 				\node[shape=rectangle,draw=black] (synopsisdb) at (\myspacing,0) {Story
 				synopsis database};
-				\node[shape=rectangle,draw=black] (synopsisgen) at (3*\myspacing,0)
+				\node[shape=rectangle,draw=black] (synopsisgen) at (5*\myspacing,0)
 				{Generation of story synopses};
 			\end{tikzpicture}\\
 		};
-		\node[outer,draw=green] (story) at (0,-7) {
+		\node[outer,draw=green] (story) at (0,-10.5) {
 			\begin{tikzpicture}
 				\node[shape=rectangle,draw=black] (storydb) at (0,0) {Story
 				database};
-				\node[shape=rectangle,draw=black] (storygen) at (4*\myspacing,0) {Story
-				generation};
+				\node[shape=rectangle,draw=black] (storygen) at (6*\myspacing,0)
+				{Generation of full stories};
 			\end{tikzpicture}\\
 		};
 		\draw[-{Stealth[scale=3.0]}] (storydb) -- (synopsisdb);
 		\draw[-{Stealth[scale=3.0]}](synopsisdb) -- (logicdb);
-		\draw[-{Stealth[scale=3.0]}](logicdb) -- (synopsisgen);
+		\draw[-{Stealth[scale=3.0]}](logicdb) -- (ruledb);
+		\draw[-{Stealth[scale=3.0]}](ruledb) -- (logicgen);
+		\draw[-{Stealth[scale=3.0]}](logicgen) -- (synopsisgen);
 		\draw[-{Stealth[scale=3.0]}](synopsisgen) -- (storygen);
 	\end{tikzpicture}
 	\caption{The story generation pipeline}
 	\label{storypipeline}
 \end{figure}
 
-The focus of this thesis is twofold: the main contribution is a way to extract the rules found in a set of
-logically represented stories, and represent them in such a way that a program can reason about
-these rules in a creative way. This corresponds to the logic database component at the top
-of figure \ref{storypipeline}, which details the assumed architecture. To do this, the story synopses have been
+The focus of this thesis is twofold: the main contribution is a way to extract
+the story rules from a set of logically represented stories, and represent them 
+in such a way that a program can reason about these rules in a creative way. 
+This corresponds to the logic database component at the top
+of figure \ref{storypipeline}, which details the assumed pipeline. To do this, the story synopses have been
 annotated manually to be able to focus on this part. However, the story
 representation has been chosen in such a way that it could plausibly be extracted
 in that form through natural language processing. 
@@ -128,7 +149,9 @@ database, which can be queried to obtain the likelihood of particular events.
 
 A basic story is represented by a series of states $s_i$ and actions $a_j$.
 Each story starts in some initial state $s_0$, then one or more actions happen
-($a_0, ..., a_j$), which lead to $s_1$. This is followed by one or more actions
+($a_0, ..., a_j$). These actions involve at least one, but
+possibly multiple characters in the story, and transform the story state $s_0$
+into $s_1$. This is followed by one or more actions
 again, which leads to $s_2$, and so on. This pattern continues until the final 
 state of the story, which is where the story ends. This model is inspired by the
 MEXICA model, although it is less constrained, since a state can be followed by
@@ -206,21 +229,37 @@ program that has to be able to generate flashbacks or framing stories.
 
 \subsubsection{States}
 
-States are represented as a graph of filled with nodes representing currently
-active characters, their abilities, and how these are connected with each other.
+States are represented as a graph filled with nodes. These nodes represent currently
+active characters and their abilities. The relations in the graph define a
+connection between these entities.
 An example of two states can be seen in figure \ref{storyrep}.
+In this figure we see the princess and frog characters represented as nodes,
+their abilities and desires being nodes themselves that are connected to their
+respective characters. 
+
+Agreements such as promises are also represented as
+nodes, connecting abilities and desires with eachother. For example,
+`\texttt{promise:2}' in State 1 represents the frog's promise to get the ball for the
+princess. This is because the node is connected to the node
+\texttt{frog\_abilities:ball} (representing the frog's ability to retrieve the
+ball) and the node \texttt{princess\_needs:ball} (representing the princess
+wanting to have the ball).
 
 \subsubsection{Actions}
 
 Actions are represented as a short, natural language-like phrase (for example 
 \texttt{``the frog gets the ball"}
-or \texttt{``the frog promises the ball to the princess"}).
+or \texttt{``the frog promises the ball to the princess"}). The actions were not
+annotated in the form of logic, since being able to parse actions in natural
+language would be a step closer to the goal of both extracting patterns directly
+from story synopses written in natural language and generating the synopsis of a
+story in natural language from a logical representation.
 These sentences are parsed with the Python Natural Language Toolkit (NLTK)
 \cite{BirdKleinLoper09}
 to obtain the subject, verb and optionally the object and/or dative (which will be
 referred to as $\texttt{subj}, \texttt{verb}, \texttt{obj}$ and $\texttt{dat}$,
 respectively). For example "the frog gets the ball" would yield 
-$\texttt{obj}=\textrm{``ball"}, \texttt{subj}=\textrm{"frog"},
+$\texttt{obj}=\textrm{``ball"}, \texttt{subj}=\textrm{``frog"},
 \texttt{verb}=\textrm{``gets"}, \texttt{dat}=\textrm{``"} $. First the
 sentences are tokenized (individual words are separated, comma's are separated
 from the word they are attached to, etc.). Then NLTK assigns a
@@ -251,7 +290,28 @@ $\texttt{obj}$ $\texttt{verb}$ and $\texttt{dat}$. It is imporant to note again 
 not all of these fields need to be instantiated. Most sentences don't have a
 dative, and with intransitive verbs there is no object either (for example, the
 sentence `John walks.' only has a subject (`John') and a verb (`walks')).
-%TODO example of a parse?
+The following is an example of what happens if the sentence ``the frog gets the
+ball'' is parsed:\\
+
+\Tree 
+[.{\texttt{S}{[}\texttt{subj}=\textrm{``frog''},
+\texttt{verb}=\textrm{``gets''}, \texttt{obj}=\textrm{``ball''},
+\texttt{dat}=\textrm{``''}{]}} 
+	[.{\texttt{NP}{[}\texttt{N}=\textrm{``frog"}{]} }
+		[.{\texttt{Det}{[}\texttt{Det}=\textrm{``the"}{]}} the ] 
+		[.{\texttt{N}{[}\texttt{N}=\textrm{``frog"}{]}} frog ]
+	] 
+	[.{\texttt{VP}{[}\texttt{V}=\textrm{``gets"}, \texttt{N}=\textrm{``ball"}, \texttt{dat}=\textrm{``"}{]}}
+		[.{\texttt{V{[}V=\textrm{``gets"}{]}}} gets ] 
+		[.{\texttt{NP}{[}\texttt{N}=\textrm{``ball"}{]} }
+			[.{\texttt{Det}{[}\texttt{Det}=\textrm{``the"}{]}} the ] 
+			[.{\texttt{N}{[}\texttt{N}=\textrm{``ball"}{]}} ball ]
+		]
+	]
+]
+
+By applying the grammar rules, the tree parser eventually finds the object, subject, verb
+and dative of the sentence. 
 
 \subsection{Rules}
 
@@ -264,7 +324,7 @@ They can be represented as a tuple of $(\texttt{action}, \texttt{obj}, \texttt{s
 
 Here, the verb denoting which action is taking place is stored in 
 $\texttt{action}$
-This is obtained from the parsed sentences' $\texttt{verb}$ field.
+This is obtained from the parsed sentences's $\texttt{verb}$ field.
 For example, ``promises'' is the action obtained from the
 sentence \texttt{``the frog promises the ball to the princess''}, since
 ``promises'' is the verb of the sentence.
@@ -293,9 +353,9 @@ desires and abilities) or connections between nodes (representing the
 connections between these entities) appearing or dissappearing.
 
 For example, if $a = \texttt{"kill"}$, $\texttt{prec}$ might be 
-$ \{\texttt{hates}(\texttt{subj}, \texttt{obj})\} $ (you have to hate someone 
-before you kill them), and $\texttt{eff}$ would be ${\texttt{delete}(\texttt{obj})}$
-(if you are killed, you are removed from the next state).
+$ \{\texttt{hates}(\texttt{subj}, \texttt{obj})\} $ (a character has to hate someone 
+before they kill them), and $\texttt{eff}$ would be ${\texttt{delete}(\texttt{obj})}$
+(if a character is killed, they are removed from the next state).
 Note that both $\texttt{prec}$ and $\texttt{eff}$ are sets of conditions.
 An action can have multiple prerequisites and multiple effects on the story state.
 
@@ -329,7 +389,7 @@ characters, and not the characters themselves (for example, in figure
 but their abilities and desires are linked to promises), this did not pick up the more
 interesting preconditions and effects of each action.
 
-So, in figure \ref{storyrep} the frog node and the nodes containing the word
+Consequently, in figure \ref{storyrep} the frog node and the nodes containing the word
 "ball" ("frog\_abilities:ball" and "princess\_needs:ball") are considered, as
 well as their immediate neighbor nodes and the connections to them (in effect,
 the whole first state without the princess node).
@@ -349,6 +409,18 @@ generation algorithm, by introducing a bias for certain stories if so desired.
 This bias would be helpful if the program would be allowed to train on stories
 it generated itself, giving preference to human-created stories, since they are
 known to be well-constructed.
+
+Before storing the preconditions and effects, all occurences of the characters
+in these rules are substituted for variables. This is done by seeing which
+characters are involved in what function ($\texttt{obj}, \texttt{subj}, \texttt{dat}$)
+and substituting them for a variable denoting this function. For example, if the
+subject \texttt{subj} equals `princess', all occurences in the preconditions and
+effects of the term `princess' are substituted for the variable 'SUB'. This is
+done so that rules can be more easily compared, since for rule analysis the
+function a character has in the event is more important than the character
+archetype. Without this step an extra
+lookup of the character's function in a rule could be done whenever the rule 
+is queried, but it is easier to only do this once.
 
 \subsubsection{Querying the rules}
 

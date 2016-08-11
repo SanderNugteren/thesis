@@ -3,9 +3,8 @@
 
 Creativity is seen as being closely correlated with intelligence (either
 creativity being a component of intelligence, or the other way around).
-However, many feel that computer programs cannot be creative. Because of the
-previously outlined correlation, this also discounts the field of artificial
-intelligence by stating it can never be ``true'' intelligence.
+This makes creativity an important subject in the field of artificial
+intelligence.
 
 According to Boden (\cite{Boden1998347})
 there are two types of creativity. There is psychological creativity (or
@@ -44,9 +43,23 @@ that it is something fundamentally human to do, which might tie it (like
 creativity) into the human thought process.
 %TODO cut down on/rewrite bullshit
 
-The approach used in this thesis is a form of instance-based learning, where the
-rules are learned from the stories in the story database themselves. This has the advantage that
-the measure of creativity of a rule is dependent on which stories have already been seen,
+Most other works in the field of automated story generation focus on making a
+rule system by hand (in the form of story grammar rules or rules that story agents should follow).
+This is not ideal, since the creator of these rules could easily add in personal
+bias (even subconsciously), and the rules can not evolve further without human
+interference, therefore limiting the amount of stories that can be generated.
+%That's bad, we should read stories like humans
+
+The research question of this thesis is, therefore: ``Is it possible to design a
+representation of stories and story rules in such a way that it is both 
+well-suited to extracting story rules from stories and well-suited to generate 
+stories from these rules?''.
+
+The approach outlined in this thesis is a form of instance-based learning, where the
+rules are learned from the stories in the story database themselves, instead of
+being made by hand. This has
+the advantage that new rules can be learned from new stories automatically, and
+that the measure of creativity of a rule is dependent on which stories have already been seen,
 which is a good metric if one considers p-creativity. Furthermore, the more data
 will be added, the more the rule distribution of the model will start to match 
 the actual historical use of rules and tropes, which would bring the system closer to
@@ -67,3 +80,14 @@ stories and analyze where similarities can be found. This would lead to
 automated story analysis, which could help writers in a more indirect way (by
 learning more about the structure of other stories, a writer can improve their
 understanding of a particular genre or storytelling in general).
+
+The rest of this thesis will be structured as follows: in section 2, related
+work (mainly in the field of storytelling) will be discussed, and an analysis
+will be done on what story representations these approaches used. Then in
+section 3, a proposal for a story generation pipeline will be discussed, as well
+as the story representation and rule extraction done in this thesis, and how
+this fits in this more general pipeline. In section 4, an example of a rule
+being extracted from two occurences in two fairy tales (``The Frog Prince'' and
+``Caliph Stork'') will be discussed. In section 5, some conclusions will be 
+drawn from these,
+and in section 6 some proposals for future work will be discussed.

@@ -54,11 +54,13 @@ Though generating these long event chains would improve the coherence of a story
 it might impede the creativity of the story generator, since trying something novel is
 difficult to do with these rigid structures (not only are the structures very
 large, making them difficult to recombine, but they are also centered on the
-protagonist, so substituting the protagonist becomes difficult to do right), while the structures presented in
+protagonist, so substituting the protagonist becomes difficult), while the structures presented in
 this work are much simpler and therefore more easily recombined in novel ways.
 
 The storygenerator MAKEBELIEVE by Liu and Singh (\cite{liu2002makebelieve}) uses
-a database of common sense reasoning to generate its stories. However, this
+a database of common sense reasoning to generate its stories. It would start out
+with some initial premise, and then use common sense to infer the logical
+consequences. However, this common sense
 database was not specifically constructed to generate stories, so the stories
 that were generated tended to be very logical, but therefore also very
 predictable. By
@@ -70,8 +72,8 @@ the rules of what is possible in the world are very different. In fairy tales,
 there is magic which can do things that are not normally possible, while in science fiction
 advanced technology fulfills a similar function. Because of this, these common sense
 databases are ill-suited to generate these kinds of stories, which brings back
-the problem that somehow knowledge has to be obtained about the fantasy
-world again (and if the representation of that knowledge is still in ontologies,
+the problem that somehow knowledge again has to be obtained about the fantasy
+world (and if the representation of that knowledge is still in ontologies,
 these ontologies would have to be created for each genre or even each individual
 story (the rules from a science fiction can be different from fairy tales, and
 even between two separate science fiction universes there might be a difference
@@ -101,7 +103,7 @@ stories, but just variations within the same scenario.
 %It would be a stretch to call these systems creative.
 
 The work in this paper is mainly inspired by the MEXICA story generator
-(\cite{perez2001mexica}). %TODO cite
+(\cite{perez2001mexica}).
 The architecture used in this thesis is similar, in that it also represents the
 story as a sequence of states and actions, and that each state consists of a
 graph of all actors in the story.

@@ -12,6 +12,8 @@ def learn_actions(state1, state2, actions):
     print "differences: " + str(differences)
     rules = []
     for action in actions:
+        if isinstance(action, list):
+            continue
         a = copy.copy(action)
         #look for the words in the action in the state_diff
         rule = StoryRule(a["VERB"])
@@ -38,6 +40,7 @@ def learn_actions(state1, state2, actions):
         print "action: " + str(action)
         print "nodes_and_neighbors: " + str(nodes_and_neighbors)
         rule.actors = a
+        #TODO add preconditions to the rule
         #find the relevant nodes (the ones contained in the "a" object) 
         #and the nodes they connect to
         relevant_edges = set()
@@ -151,7 +154,9 @@ def parse_story(story):
             last_state_index = len(parsed_story)-1
         elif isinstance(story[i], list):
             #this is a story within a story
-            parsed_story.append(parse_story(story[i]))
+            story_in_story = parse_story(story[i])
+            parsed_story.append(story_in_story[0])
+            story_rules.extend(story_in_story[1])
         else:
             raise TypeError('story contains object of type: '+type(story[i]))
     return parsed_story, story_rules
@@ -212,6 +217,16 @@ class StoryRule:
         metadat['actors'] = len(self.actors) #TODO check for (empty) strings
         return metadata
 
+    def print_all(self):
+        print '----------------------------------------------------------------'
+        print self.action
+        print self.actors
+        print 'preconditions:'
+        print self.precondition
+        print 'effects:'
+        print self.effect
+        print '----------------------------------------------------------------'
+
 class RuleBase:
     '''
     This object stores a list of parsed stories and the rules learned from them.
@@ -229,15 +244,7 @@ class RuleBase:
             story = methodToCall()
             parsed_story, story_rules = parse_story(story)
             self.story_base.append((story_name, parsed_story, story_rules))
-            self.story_base.extend(story_rules)
-            '''
-            for rule in story_rules:
-                if rule.action in rule_base:
-                    #do stuff
-                else:
-                    rule_base[rule.action] = rule
-            '''
-        return rule_base
+            self.rule_base.extend(story_rules)
 
     def query_rule_base(self, query):
         '''
@@ -260,10 +267,26 @@ class RuleBase:
                 if rule.actors[q] in query[q]]
         return len(rules_sat_q)/len(self.rule_base)
 
+def test():
+    all_rules = RuleBase(['frogprince', 'stork'])
+    actionlist = ['transforms']
+    transform_rules = [rule for rule in all_rules.rule_base if rule.action in actionlist]
+    print 'printing rules that satisfy query'
+    print len(transform_rules)
+    for rule in transform_rules:
+        rule.print_all()
+    """
+    fp = story_db.frogprince()
+    parsed_fp, rules_fp = parse_story(fp)
+    stork = story_db.stork()
+    parsed_stork, rules_stork = parse_story(stork)
+    all_rules = copy.copy(rules_fp)
+    all_rules.extend(rules_stork)
+    return all_rules
+    """
 
 if __name__ == "__main__":
-    story1 = story_db.frogprince()
-    print parse_story(story1)
+    print test()
 
 """
 import read_story

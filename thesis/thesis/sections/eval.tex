@@ -2,32 +2,170 @@
 
 The system has been tested on two stories: `The Frog Prince' and
 `Caliph Stork'. The story synopses of these stories were taken from Wikipedia
-and annotated so they conformed to the model used in this thesis (using states
-and actions).
-These stories were chosen since they both contain animal transformations. In `The
+and annotated so they conformed to the state-action model proposed by this thesis.
+These stories were chosen since they are both from the same genre (fairy tales)
+and both stories contain a common story element (human to animal transformations). In `The
 Frog Prince' the titular prince starts as a frog and eventually becomes a human
 prince, in `Caliph Stork' the caliph and his vizier start as humans, are changed
 into storks with a magic powder and both have to find a way to get back to human
-form. Since the stories have these common elements, the program has to be able to
-handle these appropriately (see them as being two instances of the same type of
-event).
+form. Since the stories have this common element, the program has to be able to
+handle this appropriately (extract similar rules for each occurence).
 
 One of the problems was that the transformations were slightly different. In
 Caliph Stork, the transformation was done with a magic powder, and if the user
 laughed while in animal form, they could not change back. This is explicitly
-told to the caliph, and by extension, to the reader. However, in the frog prince
+told to the caliph, and by extension, to the reader. However, in `The Frog
+Prince'
 there are also certain prerequisites for the frog to become a prince again, but
 these are never explicitly stated (did the frog have to be kissed by a princess,
 or would any person, male or female, do?).
 
-Since the magical transformation component in `The Frog Prince' was not explicitly
-mentioned in-story, there was also no explicit annotation. However, in `Caliph
-Stork', the rules of the magic powder were nodes themselves, all connected to
-the magic powder. Because of this, the program learned that both explicitly
-mentioning the rules was an option (and since only `Caliph Stork' had such
-rules, the magic powder and its specific rules were the only type it learned), as well as not mentioning the rules
-at all (as in `The Frog Prince'). However, the act of transformation was the
-same, so the two instances were extracted as two parts of the same rule. This proves that the
-program can learn similarities between stories like this one, and, given more
-stories, it could obtain more and more accurate information.
+To evaluate if the program was able to capture this information, it was given
+both stories with the states annotated in graph form and the actions in
+simplified natural language. The only other information it was given was the
+grammar to parse the action sentences.
 
+Both stories contain 8 occurences of a transformation. There is one animal to human
+transformation in `The Frog Prince', and there are 4 transformations from human 
+to animal and 3 transformations from animal to human in `Caliph Stork'.
+The example from `The Frog Prince' looks as follows:
+
+\begin{verbatim}
+OBJ  = `human'
+SUB  = `frog'
+PREC = [
+    (`SUB', `SUB_race:animal'),
+    (`SUB_abilities:ball', `SUB'), 
+    (`SUB', `SUB_abilities:ball'),
+    (`SUB_race:animal', `SUB')
+    ]
+EFF = {
+    `edges_gone': [
+        (`SUB', `SUB_race:animal')
+        ],
+    `edges_appeared': [
+        (`SUB_race:OBJ', `SUB')
+        ]
+    }
+\end{verbatim}
+
+A similar situation, where the caliph in `Caliph Stork' transforms from animal 
+to human form is given here:
+
+\begin{verbatim}
+OBJ  = `human'
+SUB  = `caliph'
+PREC = [
+    (`SUB_abilities:magic_powder', `SUB'),
+    ('enemy:1', `kaschnur'),
+    (`SUB_abilities:magic_powder',
+    `rule:know(x,magic_word)&&speak(x,magic_word)&&animal(x)->OBJ(x)'),
+    (`SUB_abilities:magic_powder',
+    `rule:know(x,magic_word)&&speak(x,magic_word)&&OBJ(x)->animal(x)'),
+    (`SUB_abilities:magic_powder', `rule:animal(x)&&laugh(x)->not(know(x, magic_word))'),
+    (`SUB_abilities:wealth', `SUB'), 
+    (`SUB', 'enemy:1'), 
+    (`SUB', `SUB_race:animal'),
+    (`SUB', `SUB_abilities:wealth'),
+    (`SUB', `SUB_abilities:know(SUB, magic_word)'),
+    ('enemy:1', `SUB'), 
+    (`SUB_abilities:know(SUB, magic_word)', `SUB'),
+    (`SUB', `SUB_abilities:magic_powder'), 
+    (`SUB_race:animal', `SUB')
+    ]
+EFF = {
+    `edges_gone': [
+        (`SUB', `SUB_race:animal')
+        ],
+    `edges_appeared': [
+        (`SUB', 'enemy:1'),
+        (`SUB_abilities:wealth', `SUB'),
+        (`kaschnur', 'enemy:1'),
+        (`SUB_race:OBJ', `SUB')
+        ]
+    }
+\end{verbatim}
+
+Another example of the same rule is from earlier in the story, when the caliph
+transforms from human to animal by using a magical powder:
+
+\begin{verbatim}
+OBJ    = `animal'
+SUB    = `caliph'
+PREC   = [
+    (`SUB_abilities:know(SUB, magic_word)', `SUB'),
+    (`SUB_abilities:magic_powder', `SUB'),
+    (`SUB', `SUB_race:human'),
+    (`SUB_abilities:magic_powder', 
+    `rule:know(x,magic_word)&&speak(x,magic_word)&&OBJ(x)->human(x)'), 
+    (`SUB_race:human', `SUB'),
+    (`SUB_abilities:lord_of_baghdad', `SUB'),
+    (`SUB_needs:speak_with_animals', `SUB'),
+    (`SUB_abilities:wealth', `SUB'),
+    (`SUB', `SUB_abilities:wealth'),
+    (`SUB', `SUB_abilities:know(SUB, magic_word)'),
+    (`SUB_abilities:magic_powder',
+    `rule:know(x,magic_word)&&speak(x,magic_word)&&human(x)->OBJ(x)'),
+    (`SUB', `SUB_needs:speak_with_animals'),
+    (`SUB', `SUB_abilities:magic_powder'),
+    (`SUB', `SUB_abilities:lord_of_baghdad'),
+    (`SUB_abilities:magic_powder', 
+    `rule:OBJ(x)&&laugh(x)->not(know(x, magic_word))')
+    ]
+effects: {
+    `edges_gone': [
+        (`SUB', `SUB_race:human')
+        ],
+    `edges_appeared': [
+        (`SUB_abilities:wealth', `SUB'),
+        (`SUB_race:OBJ', `SUB')
+        ]
+    }
+\end{verbatim}
+
+There are similarities between all three occurences. They all share one of the
+effects, namely that the race of the subject becomes the object
+(\texttt{`SUB\_race:OBJ', `SUB')}.
+This is a nice property, since this rule can be applied generally for all
+transformations in future stories, even if the object that the person has been
+transformed in has not been observed in another story.
+
+Another common property of these rules is that the subject loses their own race
+(this is denoted by \texttt{(`SUB', `SUB\_race:animal')} in the first two examples and 
+\texttt{(`SUB', `SUB\_race:human')} in the third example). However, this similarity is
+less pronounced than the previous one, since the race the character started out
+with was not specified in the action. The first example was obtained from the
+story event \texttt{`the frog transforms into a human.'}. If the story event had
+consistently been in the form of \texttt{`the
+frog transforms from an animal into a human.'}, then the resulting rule that
+would have been learned would have been more general like the previous rule, 
+since human to animal
+and animal to human transformations would have a similar rule due to the
+variable substitution.
+
+The transformations in `Caliph Stork' were different from the one in `The Frog
+Prince', since in `Caliph Stork' there was a magical powder with its associated
+rules (the user had to speak a magical word to transform, and would forget the
+word if they laughed in animal form), while in `The Frog Prince' there was no
+explicit rule governing the magic. The rules of this magic powder can be seen in
+the preconditions, since they were also represented as rule nodes connected to
+the ones who used the powder to tranform. For `The Frog Prince' there was no
+specific rule, so there are no additional rules added to the precondition. In a
+generation scenario, the program could choose between these examples, either
+generating a scenario with complex magical rules (as in `Caliph Stork') or a 
+scenario without these rules (like in `The Frog Prince'). 
+
+This highlights that
+though the knowledge base is able to recognize regularities in the data (like
+the changing of the subject's race), it is also able to represent diversity in
+its rule system (a generation program has access to diverse examples of
+variations within the same rule).
+
+Of course, the evaluation has been done on just two stories, since the
+annotation for now is a time-intensive process. Because of this no actual story
+generation has been done, but this thesis should be seen as more of a proof of
+concept: patterns can be recognized, and if more annotated stories were
+available (either through annotation or, more feasibly, through more
+sophisticated natural language processing), the program could learn more interesting patterns. When it is
+possible to automatically annotate the stories, it should be more feasible to
+generate actually interesting stories.

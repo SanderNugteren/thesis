@@ -2,13 +2,16 @@
 import nltk
 from nltk import grammar, parse
 
-words_seen = ['a', 'with', 'for', 'to', 'the', 'into', 'and']
+words_seen = ['a', 'an', 'with', 'for', 'to', 'the', 'into', 'and']
 GRAMMARSTR = """
 % start S
 S[SUB=?sub, VERB=?verb, OBJ=?obj, DAT=?dat] -> NP[N=?sub] VP[V=?verb, N=?obj, DAT=?dat]
+VP[V=?verb] -> VERB[SEM=?verb]
 VP[V=?verb, N=?obj] -> VERB[SEM=?verb] NP[N=?obj] 
 VP[V=?verb, N=?obj, DAT=?dat] -> VP[V=?verb, N=?obj] PP[DAT=?dat]
 VP[V=?verb, N=?obj, DAT=?dat] -> VP[V=?verb, N=?obj] SUBCL[DAT=?dat]
+NP[N=?np] -> IN[SEM=<about>] PropNP[N=?np]
+NP[N=?np] -> TO[SEM=<to>] PropNP[N=?np]
 NP[N=?np] -> PropNP[N=?np]
 NP[N=<?and(?np1)(?np2)>] -> PropNP[N=?np1] CC[SEM=?and] NP[N=?np2]
 PropNP[N=?np] -> NN[SEM=?np]
@@ -18,13 +21,16 @@ PropNP[N=?np] -> VBP[SEM=?np]
 PropNP[N=?np] -> VBN[SEM=?np]
 PP[DAT=?np] -> IN[SEM=<with>] NP[N=?np]
 PP[DAT=?np] -> IN[SEM=<for>] NP[N=?np]
+PP[DAT=?np] -> IN[SEM=<into>] NP[N=?np]
 SUBCL[DAT=?np] -> TO[SEM=<to>] NP[N=?np]
 VERB[SEM=?verb] -> V[SEM=?verb]
 VERB[SEM=?verb] -> V[SEM=?verb] IN[SEM=<into>]
 V[SEM=?verb] -> VBZ[SEM=?verb]
 DT[SEM=<a>] -> 'a'
+DT[SEM=<a>] -> 'an'
 IN[SEM=<with>] -> 'with'
 IN[SEM=<for>] -> 'for'
+IN[SEM=<about>] -> 'about'
 TO[SEM=<to>]-> 'to'
 DT[SEM=<the>] -> 'the'
 IN[SEM=<into>] -> 'into'
@@ -50,8 +56,8 @@ def add_to_grammar(rules):
 
 def parse_sentence(sentence):
     '''
-    This function will parse an action described in a plain sentence
-    For example, the sentence "the frog kill the princess" should yield
+    This function will parse an action desribed in a plain sentence
+    For example, the sentence "frog kill princess" should yield
     S[OBJ='frog', SUB='princess', VERB='kill']
     '''
     #tokens = nltk.word_tokenize(sentence)
@@ -92,7 +98,8 @@ if __name__ == "__main__":
     #sentences.append("the princess and the king and the caliph kills the frog")
     #sentences.append("princess kills frog with magic")
     #sentences.append("caliph buys magic powder")
-    sentences.append("the frog transforms into a human")
+    #sentences.append("the frog transforms into a human")
+    sentences.append("the caliph transforms into an animal")
     for s in sentences:
         print s
         p = parse_sentence(s)

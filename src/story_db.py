@@ -93,7 +93,7 @@ def stork():
     story.append(state1)
     
     #State 2
-    story.append('caliph buys magic_powder')
+    story.append('the caliph buys the magic_powder')
     state2 = copy.deepcopy(state1)
     state2.time = state1.time+1
     state2.remove('peddler_abilities:magic_powder')
@@ -103,21 +103,21 @@ def stork():
     story.append(state2)
 
     #State 3
-    #story.append('caliph learns about magic powder: speak mutabor to transform into animal, speak mutabor to transform into human, if you laugh you forget the word mutabor')
-    story.append('caliph learns about magic powder')
-    state3.time = state2.time+1
+    #story.append('caliph learns about magic powder: speak magic_word to transform into animal, speak magic_word to transform into human, if you laugh you forget the word magic_word')
+    story.append('caliph learns about magic_powder')
     state3 = copy.deepcopy(state2)
+    state3.time = state2.time+1
     #how do I represent these rules? magic_powder as a node, connected with parts of the rule? predicate logic?
-    state3.state['caliph_abilities:magic_powder'].append('rule:know(x,"mutabor")&&speak(x,"mutabor")&&animal(x)->human(x)')
-    state3.state['caliph_abilities:magic_powder'].append('rule:know(x,"mutabor")&&speak(x,"mutabor")&&human(x)->animal(x)')
-    state3.state['caliph_abilities:magic_powder'].append('rule:animal(x)&&laugh(x)->not(know(x, "mutabor"))')
-    state3.state['caliph'].append('caliph_abilities:know(caliph, "mutabor")')
-    state3.state['vizier'].append('vizier_abilities:know(vizier, "mutabor")')
+    state3.state['caliph_abilities:magic_powder'].append('rule:know(x,magic_word)&&speak(x,magic_word)&&animal(x)->human(x)')
+    state3.state['caliph_abilities:magic_powder'].append('rule:know(x,magic_word)&&speak(x,magic_word)&&human(x)->animal(x)')
+    state3.state['caliph_abilities:magic_powder'].append('rule:animal(x)&&laugh(x)->not(know(x, magic_word))')
+    state3.state['caliph'].append('caliph_abilities:know(caliph, magic_word)')
+    state3.state['vizier'].append('vizier_abilities:know(vizier, magic_word)')
     story.append(state3)
 
     #State 4
-    story.append('caliph uses magic_powder, caliph speak "mutabor". caliph becomes animal')
-    story.append('vizier uses magic_powder, vizier speak "mutabor". vizier becomes animal')
+    story.append('caliph uses magic_powder. caliph says magic_word. the caliph transforms into an animal')
+    story.append('vizier uses magic_powder. vizier says magic_word. the vizier transforms into an animal')
     state4 = copy.deepcopy(state3)
     state4.time = state3.time+1
     state4.remove('caliph_race:human')
@@ -127,24 +127,25 @@ def stork():
     story.append(state4)
 
     #State 5
-    story.append('caliph listens to an animal')
-    story.append('vizier listens to an animal')
+    story.append('the caliph listens to an animal')
+    story.append('the vizier listens to an animal')
     state5 = copy.deepcopy(state4)
     state5.time = state4.time+1
     state5.remove('caliph_needs:speak_with_animals')
     story.append(state5)
     
     #State 6
-    story.append('caliph laughs')
-    story.append('vizier laughs')
+    story.append('the caliph laughs')
+    story.append('the vizier laughs')
     state6 = copy.deepcopy(state5)
     state6.time = state5.time+1
-    state6.remove('caliph_abilities:know(caliph, "mutabor")')
-    state6.remove('vizier_abilities:know(vizier, "mutabor")')
+    state6.remove('caliph_abilities:know(caliph, magic_word)')
+    state6.remove('vizier_abilities:know(vizier, magic_word)')
     story.append(state6)
     
     #State 7
-    story.append('mirza, the son of evil magician kaschnur, an enemy of the caliph, becomes lord_of_baghdad.')
+    #story.append('mirza, the son of evil magician kaschnur, an enemy of the caliph, becomes lord_of_baghdad')
+    story.append('mirza becomes the lord_of_baghdad')
     state7 = copy.deepcopy(state6)
     state7.time = state6.time+1
     state7.remove('caliph_abilities:lord_of_baghdad')
@@ -155,19 +156,19 @@ def stork():
     story.append(state7)
     
     #State 8
-    story.append('caliph meets owl')
-    story.append('vizier meets owl')
-    story.append('owl tells that owl is the daughter of king_of_the_indies.')
+    story.append('the caliph meets the owl')
+    story.append('the vizier meets the owl')
+    #story.append('owl tells that owl is the daughter of king_of_the_indies')
     state8 = copy.deepcopy(state7)
     state8.time = state7.time+1
     state8.state['owl']  = ['owl_race:animal']
-    state9.state['king_of_the_indies']  = ['king_of_the_indies_race:human']
-    state9.state['parent:1'] = ['king_of_the_indies', 'owl']
+    state8.state['king_of_the_indies']  = ['king_of_the_indies_race:human']
+    state8.state['parent:1'] = ['king_of_the_indies', 'owl']
     story.append(state8)
     
     #State 9 (parallel story of the owl/princess starts here)
     story_owl = []
-    story_owl.append('kaschnur asks king_of_the_indies if mirza could marry owl. king_of_the_indies denies kaschnur.')
+    #story_owl.append('kaschnur asks king_of_the_indies if mirza could marry owl. king_of_the_indies denies kaschnur')
     state9 = State()
     state9.time = -2
     state9.state['owl'] = ['owl_race:human']
@@ -178,7 +179,8 @@ def stork():
     story_owl.append(state9)
     
     #State 10
-    story_owl.append('kaschnur transforms owl into animal.')
+    #story_owl.append('kaschnur transforms the owl into an animal')
+    story_owl.append('the owl transforms into an animal')
     #story_owl.append('owl can transform into human by marriage.')
     state10 = copy.deepcopy(state9)
     state10.time = state9.time+1
@@ -190,24 +192,27 @@ def stork():
     story.append(story_owl)
     
     #State 11 (main story resumes here)
-    story.append('owl promises location(peddler), caliph promises marriage between owl and caliph')
+    #story.append('owl promises location(peddler), caliph promises marriage between owl and caliph')
     state11 = copy.deepcopy(state8)
     state11.time = state8.time+1
-    state9.state['king_of_the_indies']  = ['king_of_the_indies_race:human']
+    state11.state['king_of_the_indies']  = ['king_of_the_indies_race:human']
     state11.state['promise:1'] = ['owl_abilities:location(peddler)', 'marriage(owl, caliph)']
     state11.state['enemy:2'] = ['kaschnur', 'king_of_the_indies']
     story.append(state11)
     
     #State 12
-    story.append('owl, caliph and vizier go to location(peddler). learn mutabor from peddler')
+    #story.append('owl, caliph and vizier go to location(peddler).')
+    story.append('caliph learns the  magic_word')
+    story.append('vizier learns the magic_word')
     state12 = copy.deepcopy(state11)
     state12.time = state11.time+1
-    state12.state['caliph'].append('caliph_abilities:know(caliph, "mutabor")')
-    state12.state['vizier'].append('vizier_abilities:know(vizier, "mutabor")')
+    state12.state['caliph'].append('caliph_abilities:know(caliph, magic_word)')
+    state12.state['vizier'].append('vizier_abilities:know(vizier, magic_word)')
     story.append(state12)
     
     #State 13
-    story.append('caliph and vizier transform into human')
+    story.append('caliph transforms into a human')
+    story.append('vizier transforms into a human')
     state13 = copy.deepcopy(state12)
     state13.time = state12.time+1
     state13.remove('caliph_race:animal')
@@ -217,21 +222,21 @@ def stork():
     story.append(state13)
     
     #State 14
-    story.append('caliph marries owl')
+    story.append('caliph marries the owl')
     state14 = copy.deepcopy(state13)
     state14.time = state13.time+1
     state14.state['marriage:1'] = ['caliph', 'owl']
     story.append(state14)
     
     #State 15
-    story.append('owl transform into human')
+    story.append('the owl transforms into a human')
     state15 = copy.deepcopy(state14)
     state15.time = state14.time+1
     state15.remove('owl_race:animal')
     state15.state['owl'].append('owl_race:human')
     story.append(state15)
-    story.append('caliph kills kaschnur.')
-    story.append('caliph transforms mirza into animal.')
+    story.append('caliph kills  the kaschnur')
+    story.append('caliph transforms mirza into an animal')
     state15 = copy.deepcopy(state14)
     state15.time = state14.time+1
     state15.remove('kaschnur')
