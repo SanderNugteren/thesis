@@ -1,8 +1,11 @@
 \documentclass{article}
+\usepackage{url}
 \usepackage{graphicx, color}
 \usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{qtree}
+\usepackage[title]{appendix}
 
 \newcommand{\red}[1]{{\color{red}{#1}}}
 \let\oldsection\section
@@ -87,20 +90,36 @@ Dr. R.G.F. \textsc{Winkels}\\
 \clearpage
 
 \begin{abstract}
-This work aims to develop a representation of stories, to facilitate learning the structure of stories, in
-such a way that these existing stories can be used to generate new stories. When trained on two fairy tales
-(“The Frog Prince” and “Caliph Stork”) the program was able to capture the rules of the stories and was
+Storytelling is an important part of human culture, and automated storytelling has
+been a popular topic in artificial intelligence research for a long time. However, the
+focus of the field has been on generation, as opposed to rule extraction from
+stories.
+This thesis aims to develop a representation of stories to facilitate learning the structure of stories, in
+such a way that these existing stories can be used to generate new stories in
+the future. This thesis also provides a method for extracting rules from stories
+represented according to this representation. This focus on rule extraction
+rather than story generation is novel, since most other literature focusses on
+story generation from a human-made and static rule set. When trained on two fairy tales
+(``The Frog Prince'' and ``Caliph Stork'') the program was able to capture the rules of the stories and was
 able to generalize over multiple occurences of the same event type in different stories (in this case, magical
 transformation from animal to human and vice versa).
+
 \end{abstract}
 
 \input{sections/intro.tex}
 \input{sections/related_work.tex}
+\input{sections/story_structure.tex}
 \input{sections/model.tex}
 \input{sections/eval.tex}
+\input{sections/discussion.tex}
 \input{sections/future_work.tex}
 
 \bibliographystyle{plain}
 \bibliography{thesis.bib}
+\clearpage
+
+\begin{appendices}
+\input{sections/appendices.tex}
+\end{appendices}
 
 \end{document}

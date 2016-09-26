@@ -1,0 +1,40 @@
+\section{Discussion}
+
+%Scalability?
+The current system is a proof of concept that aims to prove that rule patterns
+can be extracted from stories in such a way that both similarities in
+precondition and effect of the action can be observed. The model also
+facilitates creativity, since variations of the precondition and effect are
+still possible, and for each possibility it is possible to obtain probabilities.
+This captures the creativity of the way a rule was used in the context of a
+particular story, but it also enables a program to choose an action based on the
+probability of the rule. For variation from the norm, it might choose an action
+with low probability, but if
+this gets out of hand, it could also choose an action with a high probability to
+attempt to make the story more familiar to the reciever.
+
+As discussed in section 4.3.3, a generation program could also analyze character co-occurence
+(which characters occur regularly in the same actions). Also, since the
+occurence of a character in a certain action is stored, it is possible to
+analyze which characters often appear in the same positions.
+For example, a king
+and a sultan might fulfill the same function of a authority figure in a story,
+and therefore appear in many of the same actions.
+
+Another way the system facilitates creativity is that the rule objects are
+defined over story actions, instead of longer series of actions as discussed in
+the related work section. This ensures more freedom, since actions are not
+dependent on each other directly, but only indirectly, since certain
+preconditions have to be satisfied.
+
+Because of this, the current
+system is limited at the moment by a relatively simple tree grammar to extract
+the actions from sentences in natural language. Because of this the sentences
+were limited in complexity. This can be solved in several ways. One way would be
+to expand the grammar rules of the tree, but the more rules the tree has, the
+more parse ambiguity could become a problem.
+%How general?
+%RDF?
+%Structures that capture creativity vs. creativity in generation
+%What pieces are useful for eachother?
+%Something about how to model the discourse part of a narrative (Chatman)

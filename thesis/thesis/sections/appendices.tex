@@ -1,0 +1,43 @@
+%\section{Source code}
+
+%The code can be found on github: \url{https://github.com/SanderNugteren/thesis}
+%Maybe just provide a zip of the code?
+
+\section{Action grammar}
+
+These are the grammar rules that were used in the current implementation of the
+rule extraction algorithm to extract the rules from the action sentences. $S$ is
+assumed to be the top node for each parse tree.
+
+\begin{verbatim}
+S[SUB=?sub, VERB=?verb, OBJ=?obj, DAT=?dat] -> NP[N=?sub] VP[V=?verb, N=?obj, DAT=?dat]
+VP[V=?verb] -> VERB[SEM=?verb]
+VP[V=?verb, N=?obj] -> VERB[SEM=?verb] NP[N=?obj] 
+VP[V=?verb, N=?obj, DAT=?dat] -> VP[V=?verb, N=?obj] PP[DAT=?dat]
+VP[V=?verb, N=?obj, DAT=?dat] -> VP[V=?verb, N=?obj] SUBCL[DAT=?dat]
+NP[N=?np] -> IN[SEM=<about>] PropNP[N=?np]
+NP[N=?np] -> TO[SEM=<to>] PropNP[N=?np]
+NP[N=?np] -> PropNP[N=?np]
+NP[N=<?and(?np1)(?np2)>] -> PropNP[N=?np1] CC[SEM=?and] NP[N=?np2]
+PropNP[N=?np] -> NN[SEM=?np]
+PropNP[N=?np]-> DT[SEM=?dt] NN[SEM=?np]
+PropNP[N=?np]-> DT[SEM=?dt] JJ[SEM=?np]
+PropNP[N=?np] -> VBP[SEM=?np]
+PropNP[N=?np] -> VBN[SEM=?np]
+PP[DAT=?np] -> IN[SEM=<with>] NP[N=?np]
+PP[DAT=?np] -> IN[SEM=<for>] NP[N=?np]
+PP[DAT=?np] -> IN[SEM=<into>] NP[N=?np]
+SUBCL[DAT=?np] -> TO[SEM=<to>] NP[N=?np]
+VERB[SEM=?verb] -> V[SEM=?verb]
+VERB[SEM=?verb] -> V[SEM=?verb] IN[SEM=<into>]
+V[SEM=?verb] -> VBZ[SEM=?verb]
+DT[SEM=<a>] -> 'a'
+DT[SEM=<a>] -> 'an'
+IN[SEM=<with>] -> 'with'
+IN[SEM=<for>] -> 'for'
+IN[SEM=<about>] -> 'about'
+TO[SEM=<to>]-> 'to'
+DT[SEM=<the>] -> 'the'
+IN[SEM=<into>] -> 'into'
+CC[SEM=<\\x.(\\y.(x & y))>] -> 'and'
+\end{verbatim}

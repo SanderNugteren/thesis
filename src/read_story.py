@@ -3,7 +3,7 @@ import story_db
 import copy
 import re
 
-def learn_actions(state1, state2, actions):
+def learn_actions(state1, state2, actions, story_name):
     '''
     Learn the preconditions and effects of actions in a story
     '''
@@ -17,6 +17,7 @@ def learn_actions(state1, state2, actions):
         a = copy.copy(action)
         #look for the words in the action in the state_diff
         rule = StoryRule(a["VERB"])
+        rule.source = story_name
         #just to be safe, we don't want to substitute the verb, since this is 
         #the action
         del a["VERB"]
@@ -40,7 +41,7 @@ def learn_actions(state1, state2, actions):
         print "action: " + str(action)
         print "nodes_and_neighbors: " + str(nodes_and_neighbors)
         rule.actors = a
-        #TODO add preconditions to the rule
+        #add preconditions to the rule
         #find the relevant nodes (the ones contained in the "a" object) 
         #and the nodes they connect to
         relevant_edges = set()
@@ -122,7 +123,7 @@ def var_substitute_edge(var_dict, edge):
         new_edge.append(e_sub)
     return var_dict, tuple(new_edge)
 
-def parse_story(story):
+def parse_story(story, story_name):
     '''
     This function will parse the actions in a story into a more 
     machine-readable format, and try to learn from each action at the same time
@@ -149,7 +150,7 @@ def parse_story(story):
                 actions = parsed_story[last_state_index+1:-1]
                 #print last_state_index, len(parsed_story)-2
                 #print parsed_story
-                rules = learn_actions(prev_state, current_state, actions)
+                rules = learn_actions(prev_state, current_state, actions, story_name)
                 story_rules.extend(rules)
             last_state_index = len(parsed_story)-1
         elif isinstance(story[i], list):
@@ -203,6 +204,7 @@ class StoryRule:
         self.precondition = []
         self.effect = {}
         self.actors = []
+        self.source = ''
 
     def metadata(self):
         '''
@@ -214,17 +216,19 @@ class StoryRule:
         metadata = {}
         metadata['precs'] = len(self.precondition)
         metadata['effects'] = sum([len(self.effect[e]) for e in self.effect])
-        metadat['actors'] = len(self.actors) #TODO check for (empty) strings
+        metadata['actors'] = len(self.actors) #TODO check for (empty) strings
         return metadata
 
     def print_all(self):
         print '----------------------------------------------------------------'
         print self.action
         print self.actors
-        print 'preconditions:'
+        print 'PREC = '
         print self.precondition
-        print 'effects:'
+        print 'EFF = '
         print self.effect
+        print 'SRC = '
+        print self.source
         print '----------------------------------------------------------------'
 
 class RuleBase:
@@ -242,7 +246,7 @@ class RuleBase:
         for story_name in story_names:
             methodToCall = getattr(story_db, story_name)
             story = methodToCall()
-            parsed_story, story_rules = parse_story(story)
+            parsed_story, story_rules = parse_story(story, story_name)
             self.story_base.append((story_name, parsed_story, story_rules))
             self.rule_base.extend(story_rules)
 
@@ -268,8 +272,9 @@ class RuleBase:
         return len(rules_sat_q)/len(self.rule_base)
 
 def test():
-    all_rules = RuleBase(['frogprince', 'stork'])
-    actionlist = ['transforms']
+    all_rules = RuleBase(['frogprince']) #, 'stork'])
+    #actionlist = ['transforms']
+    actionlist = ['gets']
     transform_rules = [rule for rule in all_rules.rule_base if rule.action in actionlist]
     print 'printing rules that satisfy query'
     print len(transform_rules)

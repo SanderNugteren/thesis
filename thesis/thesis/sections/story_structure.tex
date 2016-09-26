@@ -1,0 +1,69 @@
+\section{Story and structure}
+
+To properly represent stories a theoretical model of narratives is needed first.
+The narrative model adapted for use as a basis for this thesis can be seen in figure \ref{fig:chatman}, and in this
+section the different components of the model will be explained.
+According to Chatman (\cite{chatman1980story}), a narrative has the following
+parts: the
+\emph{story (content)} and the \emph{discourse (expression)}. The story describes the events
+happening in the story and the world that the story takes place in, while the
+discourse covers how the content is communicated.
+This thesis mainly aims to model the story, though of course the story rules that are
+extracted are obtained from the story synopses in text form, so the medium, in
+our case text, does have some influence on the extraction process (and since the
+medium is part of the discourse, the extraction process is influenced by the
+discourse).
+
+\emph{Story events} have characters that are involved with them. These events
+can either be \emph{happenings} that occur without the characters intentionally trying to
+make them happen (for example, the start of a storm or an earthquake), or
+\emph{actions}
+that happen because the characters make them happen (for example, a character
+tries to obtain something, or a character tries to persuade someone to do
+something).
+
+Another part of the story is the set of \emph{existents}, which covers
+everything that exist in
+the story. This includes the \emph{characters} of the story and the
+\emph{setting}. In Chatman's model, the setting includes everything besides the
+characters, but it
+would be useful to distinguish between the \emph{setting rules} (the laws of
+physics, technology, magic, law, etc. in this particular setting, but also genre
+conventions that are usually present more implicitly in the story) and the \emph{setting objects} (all
+objects in the story that are not characters). This would be useful since it is possible to write
+many stories with different characters and setting objects in the same setting,
+which implies using the same setting rules. In a broader context, it would allow
+comparison between the setting rules from different stories, allowing them to be
+clustered according to how similar their setings are, which could be used to
+predict if stories are in similar genres.
+
+In the original model the \emph{substance of content} was also defined, meaning
+the story content filtered through the authors cultural codes. This
+of course influences the existents and events, but since it is something that is
+not explicit in the story it is difficult to extract in an objective manner
+(compared to for example the story events). It is, however, implicitly present in
+the setting rules, and so influences all narrative elements indirectly. Because
+of its subjectiveness in an otherwise structuralist approach, it is therefore
+not modelled in the representation presented in this thesis.
+
+\begin{figure}
+\Tree
+[.Narrative
+	[.{Story (content)}
+		[.Events
+			Actions
+			Happenings
+		]
+		[.Existents
+			Characters
+			[.Setting
+				{Setting rules}
+				{Setting objects}
+			]
+		]
+	]
+	{Discourse (expression)}
+]
+\caption{Adapted from Chatman \cite{chatman1980story}}
+\label{fig:chatman}
+\end{figure}

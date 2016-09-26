@@ -1,22 +1,30 @@
-\section{Conclusion}
+\section{Conclusion and future work}
+
+\subsection{Conclusion}
 %something about deep learning?
 
 The research question of this thesis is, as noted in the introduction: ``Is it possible to design a
 representation of stories and story rules in such a way that it is both 
 well-suited to extracting story rules from stories and well-suited to generate 
 stories from these rules?''.
-In this paper it is shown that the model can capture the preconditions and
+In this paper a pipeline is proposed on how to solve this problem. For the
+extraction of synopses and the logical representation possible approaches were
+outlined, the implementation of the rule extraction part of the pipeline has
+been covered in section 4.2 and 4.3, and for the generation part existing
+approaches were outlined.
+
+The rule extraction part of this pipeline was also implemented, and it was shown that the model can capture the preconditions and
 implications of actions. Also, since the model keeps a list of probable actors
 around for \texttt{obj}, \texttt{subj} and \texttt{dat},
 it can capture how these character archetypes would act in a story. Because of the
 way the model is queried however, these are not rules set in stone. A princess
 might not commit murder often, but there is a small chance that it does happen. In
 fact, a story where the princess would commit murder could be considered original, if
-handled well (with a logical justifaction arising from a set of more probable
+written well (with a logical justifaction arising from a set of more probable
 events). This shows that the representation is both able to capture the patterns
 found in the stories, but is also flexible enough to generating stories.
 
-Previously this work was more geared towards story analysis rather than story
+This work was more geared towards story analysis rather than story
 generation. Therefore the focus was more towards recognizing larger sequences of
 states and actions instead of the current approach, which tries to learn the
 action by merely looking at the preceding and the next state. That way, the program could make statements
@@ -33,7 +41,23 @@ no merit, though. Perhaps a hybrid approach which uses
 sequences of differing sizes could be used to generate stories with the
 advantages of both methods, being both coherent and creative.
 
-\section{Future work}
+In a more general sense, this thesis' focus on rule extraction rather than story
+generation from a set of static rules is novel and useful, since with a way to
+extract new patterns for stories, it is possible to have a dynamic rule base
+that can be trained on existing stories, rather than rely on humanly annotated
+rules alone.
+
+At the beginning of section 4, three problems were noted with existing
+generation models, namely rigid structure, limited initial states and hand-made
+story rules. The representation presented in this paper solves the problems with the rigid
+sructure by learning single actions instead of longer units, the state model is
+set up in such a way that many different states (both initial states and others)
+are possible, and the story rules are extracted directly from the stories. This
+is an improvement over existing approaches, and if the other elements of the
+pipeline can be implemented, it would mean a large step forwards for story
+generation.
+
+\subsection{Future work}
 
 Some improvements could be done on extracting the prerequisites for each rule.
 Currently the selection criteria are very broad, and therefore some properties
@@ -76,11 +100,19 @@ rules that is general enough that it could be used across different media.
 This could be done by reducing the plot of these new media types to text plot
 synopses.
 
-As briefly alluded to in the Model section, the next step is to let a planning
+As briefly alluded to in section 4 (the model section), the next step is to let a planning
 algorithm generate stories based on the obtained rule probabilities. A possible
 approach has been outlined in that section, but perhaps even more sophisticated
 planning is possible, either mixing probable and improbable events on the fly,
-or designing stories with more probable and improbable parts.
+or designing stories with more probable and improbable parts. 
+
+%TODO write about extracting pivotal moments
+An additional
+feature to extract during stories might be to detect where certain pivotal
+moments happen in the story. Analogous to how MEXICA detects tension for a state
+(by counting the amount of relations). For example, in the transformation fairy tales we
+have seen so far, these pivotal moments would be when the characters transform
+into animals or into human beings.
 
 Another feature that would be helpful for rule analysis would be to incorporate
 ontologies to help it make generalizations over rules.
@@ -95,6 +127,9 @@ could also more easily substitute new characters in old story rules (for
 example, generate a story where characters are changed into wolves or ducks,
 since these are also animals).
 
+%TODO write something about modelling other factors (morality, violence, story
+%complexity, etc)
+
 Another way this approach could be extended is to implement some more sophisticated
 natural language parsing to parse actions and extract states from story synopses.
 The stories the current model was trained
@@ -106,6 +141,7 @@ This would still be easier to accomplish than feeding the algorithm the complete
 story as it might be found in a book, since then the algorithm would also have
 to filter out which parts are actually relevant for the plot, and have to
 interpret the meaning of complex sequences of actions.
+
 Of course, the representation obtained automatically would not be as rich as a
 humanly annotated one, but with sufficient stories it should be possible to
 generate interesting stories even with a sparse database, without modifying the

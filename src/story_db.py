@@ -14,8 +14,8 @@ def frogprince():
     state1 = State()
     state1.time = 1
     state1.state['princess'] = ['princess_abilities:companionship',
-            'princess_needs:ball', 'princess_race:human']
-    state1.state['frog'] = ['frog_abilities:ball', 'frog_needs:companionship', 'frog_race:animal']
+            'princess_needs:retrieve(ball)', 'princess_race:human']
+    state1.state['frog'] = ['frog_abilities:get(ball)', 'frog_needs:companionship', 'frog_race:animal']
     #state1.state['princess_abilities:companionship'] = ['frog_needs:companionship']
     #state1.state['princess_needs:ball'] = ['frog_abilities:ball']
     story.append(state1)
@@ -25,7 +25,7 @@ def frogprince():
     story.append('the princess promises companionship to the frog')
     state2 = copy.deepcopy(state1)
     state2.time = state1.time+1
-    state2.state['promise:1'] = ['frog_abilities:ball', 'princess_needs:ball']
+    state2.state['promise:1'] = ['frog_abilities:get(ball)', 'princess_needs:retrieve(ball)']
     state2.state['promise:2'] = ['princess_abilities:companionship', 'frog_needs:companionship']
     story.append(state2)
 
@@ -34,7 +34,7 @@ def frogprince():
     state3 = copy.deepcopy(state2)
     state3.time = state2.time+1
     state3.remove('promise:1')
-    state3.remove('princess_needs:ball')
+    state3.remove('princess_needs:retrieve(ball)')
     story.append(state3)
 
     #State 4
@@ -168,21 +168,28 @@ def stork():
     
     #State 9 (parallel story of the owl/princess starts here)
     story_owl = []
-    #story_owl.append('kaschnur asks king_of_the_indies if mirza could marry owl. king_of_the_indies denies kaschnur')
-    state9 = State()
-    state9.time = -2
-    state9.state['owl'] = ['owl_race:human']
-    state9.state['mirza'] = ['mirza_race:human']
-    state9.state['kaschnur'] = ['kaschnur_race:human']
-    state9.state['parent:2'] = ['kaschnur', 'mirza']
-    state9.state['enemy:2'] = ['kaschnur', 'king_of_the_indies']
-    story_owl.append(state9)
+    #story_owl.append('kaschnur asks king_of_the_indies if mirza could marry owl.)
+    #story_owl.append('king_of_the_indies denies kaschnur')
+    state9a = State()
+    state9a.time = -2
+    state9a.state['owl'] = ['owl_race:human']
+    state9a.state['king_of_the_indies']  = ['king_of_the_indies_race:human']
+    state9a.state['parent:1'] = ['king_of_the_indies', 'owl']
+    state9a.state['mirza'] = ['mirza_race:human']
+    state9a.state['kaschnur'] = ['kaschnur_race:human']
+    state9a.state['parent:2'] = ['kaschnur', 'mirza']
+    story_owl.append(state9a)
+
+    story_owl.append('king_of_the_indies denies kaschnur')
+    state9b = copy.deepcopy(state9a)
+    state9b.state['enemy:2'] = ['kaschnur', 'king_of_the_indies']
+    story_owl.append(state9b)
     
     #State 10
     #story_owl.append('kaschnur transforms the owl into an animal')
     story_owl.append('the owl transforms into an animal')
     #story_owl.append('owl can transform into human by marriage.')
-    state10 = copy.deepcopy(state9)
+    state10 = copy.deepcopy(state9b)
     state10.time = state9.time+1
     state10.remove('owl_race:human')
     state10.state['owl'].append('owl_race:animal')
@@ -202,11 +209,11 @@ def stork():
     
     #State 12
     #story.append('owl, caliph and vizier go to location(peddler).')
-    story.append('caliph learns the  magic_word')
+    story.append('caliph learns the magic_word')
     story.append('vizier learns the magic_word')
     state12 = copy.deepcopy(state11)
     state12.time = state11.time+1
-    state12.state['caliph'].append('caliph_abilities:know(caliph, magic_word)')
+    ://www.youtube.com/watch?v=kgrxPMdJBcktate12.state['caliph'].append('caliph_abilities:know(caliph, magic_word)')
     state12.state['vizier'].append('vizier_abilities:know(vizier, magic_word)')
     story.append(state12)
     
@@ -246,6 +253,19 @@ def stork():
     story.append(state15)
 
     return story
+
+def list_story_actions(story_name):
+    #This function lists all story actions (all strings in the story list)
+    story_list = globals()[story_name]()
+    list_story_actions_list(story_list)
+
+def list_story_actions_list(story_list):
+    for e in story_list:
+        if isinstance(e, str):
+            print e
+        elif isinstance(e, str):
+            list_story_actions_list(e)
+
 
 class State:
     #This is basically just a dictionary, but with some helper functions
@@ -295,3 +315,4 @@ class State:
 
 if __name__ == "__main__":
     frogprince()
+    list_story_actions('stork')

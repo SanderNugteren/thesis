@@ -1,0 +1,93 @@
+\documentclass{beamer}
+
+\begin{document}
+%Titleframe
+	\begin{frame}
+		\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+		\center % Center everything on the page
+		
+		%----------------------------------------------------------------------------------------
+		%	HEADING SECTIONS
+		%----------------------------------------------------------------------------------------
+
+		\includegraphics[width=\linewidth]{./images/uvaENG}\\%[2.5cm]
+		%\textsc{\Large MSc Artificial Intelligence}\\%[0.2cm]
+		%\textsc{\normalsize Track: Learning Systems}\\%[1.0cm] % track
+		%\textsc{\Large Master Thesis}\\%[0.5cm] 
+
+		%----------------------------------------------------------------------------------------
+		%	TITLE SECTION
+		%----------------------------------------------------------------------------------------
+
+		\HRule \\%[0.4cm]
+		{ \huge \bfseries Extracting rules from story synopses}\\%[0.4cm] % Title of your document
+		\HRule \\%[0.5cm]
+		
+		%----------------------------------------------------------------------------------------
+		%	AUTHOR SECTION
+		%----------------------------------------------------------------------------------------
+
+		by\\[0.2cm]
+		\textsc{\Large Sander Nugteren}\\[0.2cm] %you name
+		6042023\\[0.2cm]
+
+
+		%----------------------------------------------------------------------------------------
+		%	DATE SECTION
+		%----------------------------------------------------------------------------------------
+
+		{\Large \today}\\[0.5cm] % Date, change the \today to a set date if you want to be precise
+
+		June 2016\\
+
+		%----------------------------------------------------------------------------------------
+		%	COMMITTEE SECTION
+		%----------------------------------------------------------------------------------------
+		\begin{minipage}[t]{0.4\textwidth}
+		\begin{flushleft} \large
+		\emph{Supervisor:} \\
+		Dr. F.M. \textsc{Nack}% Supervisor's Name
+		\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}[t]{0.4\textwidth}
+		\begin{flushright} \large
+		\emph{Assessor:} \\
+		Dr. R.G.F. \textsc{Winkels}\\
+		\end{flushright}
+		\end{minipage}\\[2cm]
+
+		%----------------------------------------------------------------------------------------
+		%	LOGO SECTION
+		%----------------------------------------------------------------------------------------
+
+		%\framebox{\rule{0pt}{2.5cm}\rule{2.5cm}{0pt}}\\[0.5cm]
+		%\includegraphics[width=2.5cm]{figure}\\ % Include a department/university logo - this will require the graphicx package
+		%\textsc{\large \red{institute name}}\\[1.0cm] % 
+		
+		%----------------------------------------------------------------------------------------
+
+		\vfill % Fill the rest of the page with whitespace
+	\end{frame}
+  
+  %Outline slide
+  \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents
+  \end{frame}
+
+  %%%%%%%%%
+% - wat is het probleem?
+% - wat voor related work is er al gedaan? hoe staat dit in verhouding met dit model?
+\input{sections/intro.tex}
+\input{sections/related_work.tex}
+\input{sections/model.tex}
+\input{sections/eval.tex}
+% - resultaten
+%     - voorbeeld
+% korte conclusie
+\input{sections/conclusion.tex}
+% discussie & future work
+\input{sections/discussion.tex}
+
+\end{document}

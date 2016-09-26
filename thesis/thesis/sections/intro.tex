@@ -29,12 +29,13 @@ gibberish or a painting with random pixels is not a valuable contribution to the
 art, since it is hard to interpret a meaning. Of course, this is an extreme
 case, but one could also say that if a writer set out to create a new work in a
 particular genre (for example, a fairy tale), but ended up with something that
-is not recognized as a work belonging to that genre, he failed at his task to
+is not recognized as a work belonging to that genre, they failed at their task to
 create a work in that genre (even though the work might have some unintentional
 value in some other way).
 
 %Storytelling is important
-Storytelling is an important part of human cultures around the world.
+Storytelling, as mentioned in the previous paragraph, is one of the possible
+forms of expression of creativity. It is also an important part of human cultures around the world.
 Stories are used to preserve history and culture, and are used to transfer values
 and experiences across generations, encouraging a broadening of horizons through
 identifying with the characters in the story, and relating these experiences to
@@ -43,23 +44,20 @@ that it is something fundamentally human to do, which might tie it (like
 creativity) into the human thought process.
 %TODO cut down on/rewrite bullshit
 
-Most other works in the field of automated story generation focus on making a
+Most other works in the field of automated story generation focus on creating a
 rule system by hand (in the form of story grammar rules or rules that story agents should follow).
 This is not ideal, since the creator of these rules could easily add in personal
-bias (even subconsciously), and the rules can not evolve further without human
+bias (even subconsciously), forget to add certain knowledge (especially common
+sense knowledge), and the rules can not evolve further without human
 interference, therefore limiting the amount of stories that can be generated.
 %That's bad, we should read stories like humans
 
-The research question of this thesis is, therefore: ``Is it possible to design a
-representation of stories and story rules in such a way that it is both 
-well-suited to extracting story rules from stories and well-suited to generate 
-stories from these rules?''.
-
-The approach outlined in this thesis is a form of instance-based learning, where the
-rules are learned from the stories in the story database themselves, instead of
+A different approach might be that of of instance-based learning, where the
+rules are learned from the stories in a story database, instead of
 being made by hand. This has
 the advantage that new rules can be learned from new stories automatically, and
-that the measure of creativity of a rule is dependent on which stories have already been seen,
+that the measure of creativity of a rule is dependent on which stories have
+already been analyzed,
 which is a good metric if one considers p-creativity. Furthermore, the more data
 will be added, the more the rule distribution of the model will start to match 
 the actual historical use of rules and tropes, which would bring the system closer to
@@ -67,9 +65,14 @@ h-creativity.
 
 From another perspective, one could say that this is analogous to how human
 creative writing process works. Authors read a lot of stories or have real-life
-experiences and recombine elements in their own stories in novel and exciting ways.
+experiences and recombine elements in their own stories in novel and exciting 
+ways. This could be by using story elements as they appeared, inverting them
+(for example, using a story element that is usually connected to a hero for a
+villain, or using a story element that is associated with female characters for
+a male character or vice versa) or subverting them (the author makes the reader
+think something will happen, but then it does not happen at all).
 
-The ruleset extracted in this way can be used both in a fully automated story
+The ruleset extracted in this way could be used both in a fully automated story
 generator, where an algorithm uses the rules and their associated probabilities
 to generate a story with minimal human input or even none at all, or it could be used as a component
 of a recommender system for writers (like the co-creative approaches detailed in
@@ -81,13 +84,22 @@ automated story analysis, which could help writers in a more indirect way (by
 learning more about the structure of other stories, a writer can improve their
 understanding of a particular genre or storytelling in general).
 
+The research question of this thesis is, therefore: ``Is it possible to design a
+representation of stories and story rules in such a way that it is both 
+well-suited to extracting story rules from stories and well-suited to generate 
+stories from these rules?''.
+
 The rest of this thesis will be structured as follows: in section 2, related
 work (mainly in the field of storytelling) will be discussed, and an analysis
-will be done on what story representations these approaches used. Then in
-section 3, a proposal for a story generation pipeline will be discussed, as well
+will be done on what story representations these approaches used. In section 3,
+the hierarchy of story elements as described by Chatman will be described, which
+forms the theoretical basis for the elements modelled in the story
+representation described in this thesis. Then in
+section 4, a proposal for a story generation pipeline will be discussed, as well
 as the story representation and rule extraction done in this thesis, and how
-this fits in this more general pipeline. In section 4, an example of a rule
+this fits in this more general pipeline. In section 5, an example of a rule
 being extracted from two occurences in two fairy tales (``The Frog Prince'' and
-``Caliph Stork'') will be discussed. In section 5, some conclusions will be 
-drawn from these,
-and in section 6 some proposals for future work will be discussed.
+``Caliph Stork'') will be discussed. In section 6 the properties of the model
+will be discussed, in section 7 some conclusions will be 
+drawn about performance of the representation and some proposals 
+for future work will be discussed.

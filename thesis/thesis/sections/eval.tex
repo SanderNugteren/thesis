@@ -1,9 +1,15 @@
 \section{Evaluation}
 
-The system has been tested on two stories: `The Frog Prince' and
-`Caliph Stork'. The story synopses of these stories were taken from Wikipedia
-and annotated so they conformed to the state-action model proposed by this thesis.
-These stories were chosen since they are both from the same genre (fairy tales)
+The system has been tested on two stories: `The Frog Prince' (\cite{frogprince}) and
+`Caliph Stork' (\cite{stork}). The stories were manually
+annotated so they conformed to the state-action model proposed by this thesis.
+In section 5.1 the stories as annotated will be presented and the similarities
+and differences between them will be discussed, and in section 5.2 an example
+involving magical transformations will be shown
+
+\subsection{Dataset}
+
+`The Frog Prince' and `Caliph Stork' were chosen since they are both from the same genre (fairy tales)
 and both stories contain a common story element (human to animal transformations). In `The
 Frog Prince' the titular prince starts as a frog and eventually becomes a human
 prince, in `Caliph Stork' the caliph and his vizier start as humans, are changed
@@ -11,14 +17,62 @@ into storks with a magic powder and both have to find a way to get back to human
 form. Since the stories have this common element, the program has to be able to
 handle this appropriately (extract similar rules for each occurence).
 
-One of the problems was that the transformations were slightly different. In
-Caliph Stork, the transformation was done with a magic powder, and if the user
-laughed while in animal form, they could not change back. This is explicitly
-told to the caliph, and by extension, to the reader. However, in `The Frog
-Prince'
+The actions of `The Frog Prince' were as follows:
+\begin{verbatim}
+the frog promises the ball to the princess
+the princess promises companionship to the frog
+the frog gets the ball
+the princess goes home. the princess has dinner with the king
+the frog asks the princess for promise:2. the princess refuses promise:2
+the king enforces the promise:2
+the princess uses companionship
+the frog transforms into a human
+the frog marries the princess
+\end{verbatim}
+
+The actions of `Caliph Stork' were the following:
+\begin{verbatim}
+the caliph buys the magic_powder
+caliph learns about magic_powder
+caliph uses magic_powder. caliph says magic_word. 
+caliph uses magic_powder. caliph says magic_word. the caliph transforms into an animal
+vizier uses magic_powder. vizier says magic_word. the vizier transforms into an animal
+the caliph listens to an animal
+the vizier listens to an animal
+the caliph laughs
+the vizier laughs
+mirza becomes the lord_of_baghdad
+the caliph meets the owl
+the vizier meets the owl
+SUBSTORY_BEGIN
+	king_of_the_indies denies kaschnur
+	the owl transforms into an animal
+SUBSTORY_END
+caliph learns the  magic_word
+vizier learns the magic_word
+caliph transforms into a human
+vizier transforms into a human
+caliph marries the owl
+the owl transforms into a human
+caliph kills kaschnur
+mirza transforms into an animal
+\end{verbatim}
+
+Even though both stories contain transformations, they vary in complexity with
+respect to the rules. In
+Caliph Stork, the transformation was done with a magic powder, the character had to
+remember a magic word, and if the character
+laughed while in animal form, they forgot the magic word and could not change back. 
+This is explicitly told to the caliph, and by extension, to the reader. 
+However, in `The Frog Prince'
 there are also certain prerequisites for the frog to become a prince again, but
 these are never explicitly stated (did the frog have to be kissed by a princess,
-or would any person, male or female, do?).
+or would any person, male or female, do?). Because of this, no explicit
+annotation has been done about the rules of the magic transformation in the frog
+prince, which results in a much simpler set of prerequisites compared to Caliph
+Stork.
+
+\subsection{Extraction of transformation}
 
 To evaluate if the program was able to capture this information, it was given
 both stories with the states annotated in graph form and the actions in
@@ -28,7 +82,8 @@ grammar to parse the action sentences.
 Both stories contain 8 occurences of a transformation. There is one animal to human
 transformation in `The Frog Prince', and there are 4 transformations from human 
 to animal and 3 transformations from animal to human in `Caliph Stork'.
-The example from `The Frog Prince' looks as follows:
+The example from `The Frog Prince' (where the story event is `the frog
+transforms into a human') looks as follows:
 
 \begin{verbatim}
 OBJ  = `human'
@@ -50,7 +105,8 @@ EFF = {
 \end{verbatim}
 
 A similar situation, where the caliph in `Caliph Stork' transforms from animal 
-to human form is given here:
+to human form is given here (The story event being `caliph transforms into a
+human'):
 
 \begin{verbatim}
 OBJ  = `human'
@@ -126,35 +182,36 @@ effects: {
 There are similarities between all three occurences. They all share one of the
 effects, namely that the race of the subject becomes the object
 (\texttt{`SUB\_race:OBJ', `SUB')}.
-This is a nice property, since this rule can be applied generally for all
+This is a good property, as it facilitates this rule to be applied generally for all
 transformations in future stories, even if the object that the person has been
 transformed in has not been observed in another story.
 
 Another common property of these rules is that the subject loses their own race
-(this is denoted by \texttt{(`SUB', `SUB\_race:animal')} in the first two examples and 
-\texttt{(`SUB', `SUB\_race:human')} in the third example). However, this similarity is
+(this is denoted by \texttt{(`SUB', `SUB\_race:animal')} being one of the
+effects of the transformation in the first two examples and 
+\texttt{(`SUB', `SUB\_race:human')} being the effect in the third example). However, this similarity is
 less pronounced than the previous one, since the race the character started out
 with was not specified in the action. The first example was obtained from the
 story event \texttt{`the frog transforms into a human.'}. If the story event had
 consistently been in the form of \texttt{`the
 frog transforms from an animal into a human.'}, then the resulting rule that
 would have been learned would have been more general like the previous rule, 
-since human to animal
-and animal to human transformations would have a similar rule due to the
-variable substitution.
+since the race that the frog used to have (animal) would have its own variable,
+making it more similar to a transformation in the opposite direction (for
+example \texttt{the caliph transforms into an animal}).
+%TODO try again, apparently
 
-The transformations in `Caliph Stork' were different from the one in `The Frog
+As said earlier in this section, the transformations in `Caliph Stork' were different from the one in `The Frog
 Prince', since in `Caliph Stork' there was a magical powder with its associated
-rules (the user had to speak a magical word to transform, and would forget the
+rules (the character using the powder had to speak a magical word to transform, and would forget the
 word if they laughed in animal form), while in `The Frog Prince' there was no
 explicit rule governing the magic. The rules of this magic powder can be seen in
 the preconditions, since they were also represented as rule nodes connected to
-the ones who used the powder to tranform. For `The Frog Prince' there was no
+the characters who used the powder to transform. For `The Frog Prince' there was no
 specific rule, so there are no additional rules added to the precondition. In a
 generation scenario, the program could choose between these examples, either
 generating a scenario with complex magical rules (as in `Caliph Stork') or a 
-scenario without these rules (like in `The Frog Prince'). 
-
+scenario without these rules (like in `The Frog Prince').
 This highlights that
 though the knowledge base is able to recognize regularities in the data (like
 the changing of the subject's race), it is also able to represent diversity in
@@ -168,4 +225,5 @@ concept: patterns can be recognized, and if more annotated stories were
 available (either through annotation or, more feasibly, through more
 sophisticated natural language processing), the program could learn more interesting patterns. When it is
 possible to automatically annotate the stories, it should be more feasible to
-generate actually interesting stories.
+generate actually interesting stories, since the program will be able to learn a
+larger amount and variety of rules.

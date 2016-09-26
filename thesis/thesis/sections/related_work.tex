@@ -5,22 +5,94 @@ videogames (\cite{liapis2014computational} \cite{crawford1998computer}), paintin
 (\cite{colton2015painting}), dance choreography (\cite{carlson2011scuddle}) and
 music (\cite{johnson2014musical}).
 
-Most early work in storytelling has been inspired by the work of Propp
-(\cite{propp1968morphology}). Propp identified many recurring plot elements in
+In this section related work on storytelling will be discussed. First the 
+different approaches
+to story analysis and structure will be covered, followed by a discussion of story
+representation. Afterwards some different formalisms for story generation will be
+discussed.
+
+\subsection{Story}
+
+There are many movements of literary theory.
+For example, there is the Marxist theory of literary criticism, which views
+stories in terms of the society from which they originate
+(\cite{eagleton2002marxism}), Darwinian literary criticism which views stories
+in the context of evolutionary biology (\cite{carroll2004literary}) and many others.
+One such movement is the Russian
+formalist movement, which was a structuralist movement. The structuralists
+tried to analyze literature by analyzing its structure (the story
+devices that were used) instead of the previously mentioned traditional 
+psychological or
+culture-historical approaches. Because of the emphasis on story structure this
+school of literary theory is the most attractive starting point for automated story telling, since
+the structures are already catalogued in such a way that a grammar or similar
+rule system can be based on them. This framework formed the basis for many early
+automated story generators, which will be discussed in section 2.3.
+The work of Chatman (\cite{chatman1980story})
+can be seen in a similar structuralist vein, since it describes stories in terms
+of their structure too. Chatman defines a hierarchy of narrative elements such
+as characters, actions and setting, which together form the whole narrative
+experience. Chatman's hierarchy will be explored further in section 3.
+
+\subsection{Story representation}
+
+In 1975, Minsky devised a representation of events called \emph{frames}
+(\cite{minsky1975framework}). These frames represented a stereotyped scenario
+(such as going to a child's birthday party), with certain concepts being constants
+(always true for that type of situation) and others being variables that could
+be instantiated for each situation. Related frames (representing sequences of
+scenarios) are linked together in \emph{frame systems}. This representation was
+not devised specifically for storytelling purposes, but rather to capture
+general world knowledge, from natural language to computer vision, in such a way
+that these diverse types of knowledge could be compared. Because of this the
+representation is described in very general terms, and therefore difficult to
+apply in practice.
+
+A similar but more practical version of this idea was proposed by Schank and Abelson
+\cite{schank1975scripts}. They
+tried to capture similar sequences of events in \emph{scripts}. This
+representation was similar to the frame representation, but was more structured,
+since all possible actions were defined. Since the aim was to represent
+knowledge and not storytelling, it did not implement measures to ensure
+creativity, but was geared more towards question answering about the story
+content.
+
+A continuation of this work on knowledge representation can be seen in case-based reasoning.
+Case-based reasoning is based on the idea that new problems can be solved by
+using the solutions to past problems. This is done by adapting the solution of
+an old problem to fit a new problem. This idea was pioneered by Schank
+(\cite{schank1983dynamic}).
+
+To aid the creation of the semantic web (a machine-readable internet), another
+form of knowledge representation was developed, the Resource Description
+Framework (RDF) (\cite{klynecarrollrdf}). This representation specification was
+designed to represent the relations between different entities (which were
+represented by uniform resource identifier (URI)). These relations were
+represented as so-called triples, in the form of subject-predicate-object. The
+ontologies created with RDF can be seen as graphs, with URI's being the nodes
+and predicates being the relations between these nodes.
+
+\subsection{Story generation}
+
+Most early work in automated storytelling has been inspired by the work of Propp
+(\cite{propp1968morphology}), who was a Russian formalist. Propp identified many recurring plot elements in
 Russian folk tales (for example `pursuit', where the hero pursues the villain, or
 `wedding', where the hero marries and gets rewarded by the community (for example
 by ascension to the throne)), as well as recurring character archetypes (hero, villain,
-the helper and the princess). This served to create an ontology for folk tales,
+the helper and the princess).
+
+The work of Propp served to create an ontology for folk tales,
 so that they could be more easily analyzed and compared, but later inspired
 approaches using a story grammar, the intuition being that there exists a distinct
-ordering of story elements for all stories (with some story elements being optional). A
+ordering of story elements for all stories (with variations being possible in
+story elements and some story elements being optional). A
 notable example of this story grammar philosophy is TALE-SPIN
 (\cite{meehan1977tale}), which tries to model the author process as generating
 a problem for the story by selecting certain attributes for characters (for example, one of the characters is hungry), and then
 applies certain grammar rules to solve the problem of the story (the character
 tries to obtain food).
 Of course, all story rules and all possible character attributes for the grammar were put in
-a priori, and therefore the stories that were generated were very basic. Also,
+a priori, and therefore the stories that could be generated were very basic. Also,
 story generation is seen as purely logic problem solving, and therefore there
 is no way to distinguish between all possible problem solutions in such a way that the
 most enjoyable solution (for the reader) is chosen.
@@ -28,9 +100,11 @@ most enjoyable solution (for the reader) is chosen.
 More recently, there
 is the work by Gerv\'as et al. (\cite{Gervas2005235}) that uses case-based
 reasoning with a representation based on the plot elements and character
-archetypes of Propp. The way this works is that a sequence of events is generated using the
+archetypes of Propp.
+The way the approach by Gerv\'as works is that a sequence of events is generated using the
 building blocks provided by Propp, and then templates are used to generate a
 story in natural language.
+%TODO move this to a later section
 The model proposed in this thesis is more general, however, since there is very
 little domain knowledge involved (just the content of the stories themselves, as
 opposed to the manually obtained knowledge from Propp).
@@ -39,7 +113,7 @@ not just for generating new stories within other genres by simply training on a
 different set of stories, but possibly also to
 build a story model using multiple genres at the same time.
 
-There is also the work of McIntyre and Lapata (\cite{McIntyre2010}), which
+McIntyre and Lapata (\cite{McIntyre2010}) describe a system which
 generates stories using evolutionary algorithms. This work is inspired by the
 work of Chambers and Jurafsky (\cite{chambers2009unsupervised}). Both works are
 also datadriven, but they try to learn certain predicate co-occurences (when someone
@@ -50,7 +124,7 @@ certain participant (called the \emph{protagonist}). This leads to schemata that
 can contain a great deal of events. This schemata can be branching (somebody on trial
 might be convicted or go free), further increasing the complexity of the
 structures learned.
-Though generating these long event chains would improve the coherence of a story, 
+Though generating stories using these long event chains would improve story coherence,
 it might impede the creativity of the story generator, since trying something novel is
 difficult to do with these rigid structures (not only are the structures very
 large, making them difficult to recombine, but they are also centered on the
@@ -106,7 +180,9 @@ The work in this paper is mainly inspired by the MEXICA story generator
 (\cite{perez2001mexica}).
 The architecture used in this thesis is similar, in that it also represents the
 story as a sequence of states and actions, and that each state consists of a
-graph of all actors in the story.
+graph of all actors in the story. This state representation is similar to the
+RDF format, since all relations are also defined as triples
+(subject-predicate-object).
 However, in MEXICA the relations between characters were much simpler (the only
 type of relation between characters is a 5 point scale ranging from hatred to
 love), and 

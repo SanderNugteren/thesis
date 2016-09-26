@@ -99,7 +99,8 @@ if __name__ == "__main__":
     #sentences.append("princess kills frog with magic")
     #sentences.append("caliph buys magic powder")
     #sentences.append("the frog transforms into a human")
-    sentences.append("the caliph transforms into an animal")
+    #sentences.append("the caliph transforms into an animal")
+    sentences.append("the frog gets the ball")
     for s in sentences:
         print s
         p = parse_sentence(s)
